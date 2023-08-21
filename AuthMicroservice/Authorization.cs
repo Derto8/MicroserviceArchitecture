@@ -5,7 +5,6 @@ using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace AuthMicroservice
 {
@@ -35,7 +34,7 @@ namespace AuthMicroservice
             _userRepository.Dispose();
         }
 
-        public async Task<string> AuthorizationMethod(string login, string password)
+        public async Task<IResult> AuthorizationMethod(string login, string password)
         {
             Users user = await _userRepository.Authorization(login, password);
 
@@ -45,9 +44,7 @@ namespace AuthMicroservice
 
                 _logger.LogInformation($"Юзер авторизировался: {login}");
 
-                string jwtString = JsonConvert.SerializeObject(jwt);
-
-                return jwtString;
+                return jwt;
             }
             _logger.LogInformation($"Юзер не смог авторизироваться\n" +
                 $"Login: {login}, Pass: {password}");
