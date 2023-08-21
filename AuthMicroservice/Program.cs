@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shed.CoreKit.WebApi;
 
@@ -30,15 +31,14 @@ namespace AuthMicroservice
             });
 
             //игнорируем ссылка на циклы и не сериализируем их
-            builder.Services.AddControllers().AddNewtonsoftJson(opt =>
-            {
-                opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            });
+            //builder.Services.AddControllers().AddNewtonsoftJson(opt =>
+            //{
+            //    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            //});
 
 
             builder.Services.AddTransient<IAuthorization, Authorization>();
-            //builder.Services.AddTransient<HttpClient>();
+            builder.Services.AddTransient<HttpClient>();
 
             var app = builder.Build();
 

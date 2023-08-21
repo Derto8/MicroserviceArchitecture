@@ -37,14 +37,14 @@ namespace IntraVisionTestTask.Controllers
             return await _coinsRepository.Get(coinId);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut(template: "ChangeAmountCoin")]
         public async Task ChangeAmountCoin(Guid coinId, int amount)
         {
             await _coinsRepository.ChangeAmountCoin(coinId, amount);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut(template: "ChangeBlockStatusCoin")]
         public async Task ChangeBlockStatusCoin(Guid coinId, bool state)
         {

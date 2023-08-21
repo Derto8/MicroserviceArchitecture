@@ -5,6 +5,6 @@ namespace AuthMicroservice.Interfaces
     public interface IAuthorization : IDisposable
     {
         [HttpPost, Route("authuser/{login}/{password}")]
-        Task<IResult> AuthorizationMethod(string login, string password);
+        Task<string> AuthorizationMethod(string login, string password);
     }
 }

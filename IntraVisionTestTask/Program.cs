@@ -51,7 +51,6 @@ namespace IntraVisionTestTask
             //игнорируем ссылка на циклы и не сериализируем их
             builder.Services.AddControllers().AddNewtonsoftJson(opt =>
             {
-                opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
