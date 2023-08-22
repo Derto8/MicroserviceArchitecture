@@ -29,11 +29,6 @@ namespace AuthMicroservice
 
         }
 
-        public void Dispose()
-        {
-            _userRepository.Dispose();
-        }
-
         public async Task<IResult> AuthorizationMethod(string login, string password)
         {
             Users user = await _userRepository.AuthorizationAsync(login, password);
