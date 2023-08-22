@@ -28,7 +28,6 @@ namespace IntraVisionTestTask.Controllers
         [HttpGet(template: "GetAllCoins")]
         public async Task<IEnumerable<Coins>> GetAllCoins(CancellationToken cancellationToken)
         {
-            await Task.Delay(10000000, cancellationToken);
             return await _coinsRepository.GetAllAsync(cancellationToken);
         }
 

@@ -5,7 +5,7 @@ namespace AuthMicroservice.AuthClassies
 {
     public static class ClaimSettings 
     { 
-        public static List<Claim> GetClaims(Users user)
+        public static List<Claim> GetClaims(Users user, CancellationToken cancellationToken)
         {
             var claims = new List<Claim> {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),

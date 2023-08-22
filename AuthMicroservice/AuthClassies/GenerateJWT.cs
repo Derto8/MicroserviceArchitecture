@@ -6,10 +6,10 @@ namespace AuthMicroservice.AuthClassies
 {
     public static class GenerateJWT
     {
-        public static IResult Generate(Users user, IConfiguration configuration)
+        public static IResult Generate(Users user, IConfiguration configuration, CancellationToken cancellationToken)
         {
             //настройка клаймов (клайм логина и роли юзера)
-            var claims = ClaimSettings.GetClaims(user);
+            var claims = ClaimSettings.GetClaims(user, cancellationToken);
 
             JwtSecurityToken jwt = new JwtSecurityToken(
                 issuer: configuration["ISSUER"],

@@ -1,6 +1,7 @@
 
 using AuthMicroservice;
 using AuthMicroservice.AuthClassies;
+using AuthMicroservice.Controllers;
 using AuthMicroservice.Interfaces;
 using DBContext;
 using DBContext.Interfaces;
@@ -38,9 +39,9 @@ namespace IntraVisionTestTask
                     ValidIssuer = authConfig["ISSUER"],
                     ValidateAudience = true,
                     ValidAudience = authConfig["AUDIENCE"],
-                    ValidateLifetime = false,
+                    ValidateLifetime = true,
                     IssuerSigningKey = KeyEncryption.GetSymmetricSecurityKey(authConfig["KEY"]),
-                    ValidateIssuerSigningKey = true
+                    ValidateIssuerSigningKey = true,
                 };
             }); ;
 

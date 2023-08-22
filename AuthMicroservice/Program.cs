@@ -1,4 +1,5 @@
 using AuthMicroservice.AuthClassies;
+using AuthMicroservice.Controllers;
 using AuthMicroservice.Interfaces;
 using DBContext;
 using DBContext.Interfaces;
@@ -31,13 +32,6 @@ namespace AuthMicroservice
             {
                 opt.UseSqlServer(conn);
             });
-
-            //игнорируем ссылка на циклы и не сериализируем их
-            //builder.Services.AddControllers().AddNewtonsoftJson(opt =>
-            //{
-            //    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            //});
-
 
             builder.Services.AddTransient<IAuthorization, Authorization>();
             builder.Services.AddTransient<HttpClient>();
