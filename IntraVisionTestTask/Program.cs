@@ -122,13 +122,6 @@ namespace IntraVisionTestTask
                     .AllowAnyHeader();
             });
 
-
-            //заполнение бд данными
-            using (var scope = app.Services.CreateScope())
-            {
-                await AddObjectsToDB.Initial(scope.ServiceProvider.GetRequiredService<ApplicationContext>());
-            }
-
             string address = builder.Configuration["Addres"];
 
             //перенаправление на микросервис по порту 5001

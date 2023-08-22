@@ -28,20 +28,18 @@ namespace AuthMicroservice.Controllers
             _logger = logger;
             _configuration = configuration.GetSection("Authorization");
 
-            //_authorization = new Authorization(
-            //    loggerAuth,
-            //    context,
-            //    configuration,
-            //    loggerRepo);
-            _userRepository = new UserRepository(context, loggerRepo);
+            _authorization = new Authorization(
+                loggerAuth,
+                context,
+                configuration,
+                loggerRepo);
         }
 
         //  [HttpPost(template: "AuthMethod")]
         [HttpPost, Route("authuser/{login}/{password}")]
         public async Task<IResult> AuthorizationMethod(string login, string password, CancellationToken cancellationToken)
         {
-            return null;
-           // return await _authorization.AuthorizationMethod(login, password, cancellationToken);
+            return await _authorization.AuthorizationMethod(login, password, cancellationToken);
         }
     }
 }
