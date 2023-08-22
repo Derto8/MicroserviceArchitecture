@@ -9,7 +9,7 @@ namespace DBContext.Interfaces
 {
     public interface ICoinsRepository : IBaseRepository<Coins>
     {
-        Task ChangeBlockStatusCoinAsync(Guid coinId, bool state);
-        Task ChangeAmountCoinAsync(Guid coinId, int amount);
+        Task ChangeBlockStatusCoinAsync(Guid coinId, bool state, CancellationToken cancellationToken);
+        Task ChangeAmountCoinAsync(Guid coinId, int amount, CancellationToken cancellationToken);
     }
 }

@@ -27,34 +27,34 @@ namespace IntraVisionTestTask.Controllers
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPost(template: "AddDrink")]
-        public async Task Add(string drink)
+        public async Task Add(Drinks drink, CancellationToken cancellationToken)
         {
-            await _drinksRepository.AddAsync(null);
+            await _drinksRepository.AddAsync(drink, cancellationToken);
         }
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut(template: "UpdateDrink")]
-        public async Task Update(Guid idDrink, Drinks drink)
+        public async Task Update(Guid idDrink, Drinks drink, CancellationToken cancellationToken)
         {
-            await _drinksRepository.UpdateAsync(idDrink, drink);
+            await _drinksRepository.UpdateAsync(idDrink, drink, cancellationToken);
         }
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpDelete(template: "DeleteDrink")]
-        public async Task Delete(Guid idDrink)
+        public async Task Delete(Guid idDrink, CancellationToken cancellationToken)
         {
-            await _drinksRepository.DeleteAsync(idDrink);
+            await _drinksRepository.DeleteAsync(idDrink, cancellationToken);
         }
         [HttpPost(template: "GetDrink")]
-        public async Task<Drinks> Get(Guid idDrink)
+        public async Task<Drinks> Get(Guid idDrink, CancellationToken cancellationToken)
         {
-            return await _drinksRepository.GetAsync(idDrink);
+            return await _drinksRepository.GetAsync(idDrink, cancellationToken);
         }
 
         [HttpGet(template: "GetAllDrinks")]
-        public async Task<IEnumerable<Drinks>> GetAll()
+        public async Task<IEnumerable<Drinks>> GetAll(CancellationToken cancellationToken)
         {
-            return await _drinksRepository.GetAllAsync();
+            return await _drinksRepository.GetAllAsync(cancellationToken);
         }
     }
 }

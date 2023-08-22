@@ -21,6 +21,8 @@ namespace AuthMicroservice
             builder.Services.AddCorrelationToken();
             builder.Services.AddCors();
 
+            builder.Services.AddMvcCore();
+
             builder.Services.AddControllers();
 
             //подключение бд

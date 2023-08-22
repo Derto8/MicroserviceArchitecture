@@ -21,38 +21,39 @@ namespace DBContext.RepositoryServices
             _logger = logger;
         }
 
-        public async Task AddAsync(Drinks drink)
+        public async Task AddAsync(Drinks drink, CancellationToken cancellationToken)
         {
-            await _context.DrinksTable.AddAsync(drink);
-            await SaveAsync();
+            await _context.DrinksTable.AddAsync(drink, cancellationToken);
+            await SaveAsync(cancellationToken);
         }
 
-        public async Task UpdateAsync(Guid idDrink, Drinks drink)
+        public async Task UpdateAsync(Guid idDrink, Drinks drink, CancellationToken cancellationToken)
         {
-            Drinks drinkChange = await GetAsync(idDrink);
+            Drinks drinkChange = await GetAsync(idDrink, cancellationToken);
             _context.Entry(drink).State = EntityState.Modified;
-            await SaveAsync();
+            await SaveAsync(cancellationToken);
         }
 
-        public async Task DeleteAsync(Guid idDrink)
+        public async Task DeleteAsync(Guid idDrink, CancellationToken cancellationToken)
         {
-            Drinks drinkChange = await GetAsync(idDrink);
+            Drinks drinkChange = await GetAsync(idDrink, cancellationToken);
             _context.DrinksTable.Remove(drinkChange);
+            await SaveAsync(cancellationToken);
         }
 
-        public async Task<Drinks> GetAsync(Guid itemId)
+        public async Task<Drinks> GetAsync(Guid itemId, CancellationToken cancellationToken)
         {
-            return await _context.DrinksTable.Where(c => c.Id == itemId).FirstOrDefaultAsync();
+            return await _context.DrinksTable.Where(c => c.Id == itemId).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Drinks>> GetAllAsync()
+        public async Task<IEnumerable<Drinks>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.DrinksTable.ToListAsync();
+            return await _context.DrinksTable.ToListAsync(cancellationToken);
         }
 
-        public async Task SaveAsync()
+        public async Task SaveAsync(CancellationToken cancellationToken)
         {
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

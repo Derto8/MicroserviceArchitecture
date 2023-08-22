@@ -25,6 +25,9 @@ namespace IntraVisionTestTask
 
             builder.Services.AddAuthorization();
 
+            //чтобы из DI-контейнера экшонам контроллера присылался cancellationToken
+            builder.Services.AddMvc();
+
             //настройка параметров валидации jwt
             IConfigurationSection authConfig = builder.Configuration.GetSection("Authorization");
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -119,14 +122,13 @@ namespace IntraVisionTestTask
             });
 
 
-            string address = builder.Configuration["Addres"];
-
             //заполнение бд данными
             using (var scope = app.Services.CreateScope())
             {
                 await AddObjectsToDB.Initial(scope.ServiceProvider.GetRequiredService<ApplicationContext>());
             }
 
+            string address = builder.Configuration["Addres"];
 
             //перенаправление на микросервис по порту 5001
             app.UseWebApiRedirect("api/auth", new WebApiEndpoint<IAuthorization>(new Uri($"{address}:5001"))); 

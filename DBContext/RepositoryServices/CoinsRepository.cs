@@ -22,40 +22,40 @@ namespace DBContext.RepositoryServices
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Coins>> GetAllAsync()
+        public async Task<IEnumerable<Coins>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.CoinsTable.ToListAsync();
+            return await _context.CoinsTable.ToListAsync(cancellationToken);
         }
 
-        public async Task SaveAsync()
+        public async Task SaveAsync(CancellationToken cancellationToken)
         {
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task ChangeAmountCoinAsync(Guid coinId, int amount)
+        public async Task ChangeAmountCoinAsync(Guid coinId, int amount, CancellationToken cancellationToken)
         {
             if(amount >= 0)
             {
-                Coins coinChange = await GetAsync(coinId);
+                Coins coinChange = await GetAsync(coinId, cancellationToken);
                 _context.Entry(coinChange).State = EntityState.Modified;
 
                 coinChange.Amount = amount;
-                await SaveAsync();
+                await SaveAsync(cancellationToken);
             }
         }
 
-        public async Task ChangeBlockStatusCoinAsync(Guid coinId, bool state)
+        public async Task ChangeBlockStatusCoinAsync(Guid coinId, bool state, CancellationToken cancellationToken)
         {
-            Coins coinChange = await GetAsync(coinId);
+            Coins coinChange = await GetAsync(coinId, cancellationToken);
             _context.Entry(coinChange).State = EntityState.Modified;
 
             coinChange.IsBlocked = state;
-            await SaveAsync();
+            await SaveAsync(cancellationToken);
         }
 
-        public async Task<Coins> GetAsync(Guid itemId)
+        public async Task<Coins> GetAsync(Guid itemId, CancellationToken cancellationToken)
         {
-            return await _context.CoinsTable.Where(c => c.Equals(itemId)).FirstOrDefaultAsync();
+            return await _context.CoinsTable.Where(c => c.Equals(itemId)).FirstOrDefaultAsync(cancellationToken);
         }
     }
 }

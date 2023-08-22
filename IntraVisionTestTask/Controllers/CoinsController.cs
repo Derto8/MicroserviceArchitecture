@@ -26,29 +26,30 @@ namespace IntraVisionTestTask.Controllers
         }
 
         [HttpGet(template: "GetAllCoins")]
-        public async Task<IEnumerable<Coins>> GetAllCoins()
+        public async Task<IEnumerable<Coins>> GetAllCoins(CancellationToken cancellationToken)
         {
-            return await _coinsRepository.GetAllAsync();
+            await Task.Delay(10000000, cancellationToken);
+            return await _coinsRepository.GetAllAsync(cancellationToken);
         }
 
         [HttpPost(template: "GetCoin")]
-        public async Task<Coins> GetCoin(Guid coinId)
+        public async Task<Coins> GetCoin(Guid coinId, CancellationToken cancellationToken)
         {
-            return await _coinsRepository.GetAsync(coinId);
+            return await _coinsRepository.GetAsync(coinId, cancellationToken);
         }
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut(template: "ChangeAmountCoin")]
-        public async Task ChangeAmountCoin(Guid coinId, int amount)
+        public async Task ChangeAmountCoin(Guid coinId, int amount, CancellationToken cancellationToken)
         {
-            await _coinsRepository.ChangeAmountCoinAsync(coinId, amount);
+            await _coinsRepository.ChangeAmountCoinAsync(coinId, amount, cancellationToken);
         }
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut(template: "ChangeBlockStatusCoin")]
-        public async Task ChangeBlockStatusCoin(Guid coinId, bool state)
+        public async Task ChangeBlockStatusCoin(Guid coinId, bool state, CancellationToken cancellationToken)
         {
-            await _coinsRepository.ChangeBlockStatusCoinAsync(coinId, state);
+            await _coinsRepository.ChangeBlockStatusCoinAsync(coinId, state, cancellationToken);
         }
     }
 }

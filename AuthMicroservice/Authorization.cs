@@ -29,9 +29,9 @@ namespace AuthMicroservice
 
         }
 
-        public async Task<IResult> AuthorizationMethod(string login, string password)
+        public async Task<IResult> AuthorizationMethod(string login, string password, CancellationToken cancellationToken)
         {
-            Users user = await _userRepository.AuthorizationAsync(login, password);
+            Users user = await _userRepository.AuthorizationAsync(login, password, cancellationToken);
 
             if (user != null)
             {

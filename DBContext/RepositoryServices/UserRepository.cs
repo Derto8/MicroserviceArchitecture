@@ -22,32 +22,32 @@ namespace DBContext.RepositoryServices
             _context = context;
         }
 
-        public async Task<Users> AuthorizationAsync(string login, string pass)
+        public async Task<Users> AuthorizationAsync(string login, string pass, CancellationToken cancellationToken)
         {
             Users? user = await _context.UsersTable.Where(c => c.Login == login
-                && c.Password == pass).FirstOrDefaultAsync();
+                && c.Password == pass).FirstOrDefaultAsync(cancellationToken);
             return user;
         }
 
-        public async Task<Users> GetAsync(Guid itemId)
+        public async Task<Users> GetAsync(Guid itemId, CancellationToken cancellationToken)
         {
-            return await _context.UsersTable.Where(c => c.Id == itemId).FirstOrDefaultAsync();
+            return await _context.UsersTable.Where(c => c.Id == itemId).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<Users>> GetAllAsync()
+        public async Task<IEnumerable<Users>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.UsersTable.ToListAsync();
+            return await _context.UsersTable.ToListAsync(cancellationToken);
         }
 
-        public async Task RegistrationAsync(Users user)
+        public async Task RegistrationAsync(Users user, CancellationToken cancellationToken)
         {
-            await _context.UsersTable.AddAsync(user);
-            await SaveAsync();
+            await _context.UsersTable.AddAsync(user, cancellationToken);
+            await SaveAsync(cancellationToken);
         }
 
-        public async Task SaveAsync()
+        public async Task SaveAsync(CancellationToken cancellationToken)
         {
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

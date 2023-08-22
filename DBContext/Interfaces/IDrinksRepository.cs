@@ -9,8 +9,8 @@ namespace DBContext.Interfaces
 {
     public interface IDrinksRepository : IBaseRepository<Drinks>
     {
-        Task AddAsync(Drinks drink);
-        Task UpdateAsync(Guid idDrink, Drinks drink);
-        Task DeleteAsync(Guid idDrink);
+        Task AddAsync(Drinks drink, CancellationToken cancellationToken);
+        Task UpdateAsync(Guid idDrink, Drinks drink, CancellationToken cancellationToken);
+        Task DeleteAsync(Guid idDrink, CancellationToken cancellationToken);
     }
 }
