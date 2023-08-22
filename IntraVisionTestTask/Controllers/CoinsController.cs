@@ -28,27 +28,27 @@ namespace IntraVisionTestTask.Controllers
         [HttpGet(template: "GetAllCoins")]
         public async Task<IEnumerable<Coins>> GetAllCoins()
         {
-            return await _coinsRepository.GetAll();
+            return await _coinsRepository.GetAllAsync();
         }
 
         [HttpPost(template: "GetCoin")]
         public async Task<Coins> GetCoin(Guid coinId)
         {
-            return await _coinsRepository.Get(coinId);
+            return await _coinsRepository.GetAsync(coinId);
         }
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut(template: "ChangeAmountCoin")]
         public async Task ChangeAmountCoin(Guid coinId, int amount)
         {
-            await _coinsRepository.ChangeAmountCoin(coinId, amount);
+            await _coinsRepository.ChangeAmountCoinAsync(coinId, amount);
         }
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut(template: "ChangeBlockStatusCoin")]
         public async Task ChangeBlockStatusCoin(Guid coinId, bool state)
         {
-            await _coinsRepository.ChangeBlockStatusCoin(coinId, state);
+            await _coinsRepository.ChangeBlockStatusCoinAsync(coinId, state);
         }
 
         public void Dispose()

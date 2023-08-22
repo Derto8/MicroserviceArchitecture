@@ -12,8 +12,8 @@ namespace DBContext.Interfaces
     /// <typeparam name="T"></typeparam>
     public interface IBaseRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAll();
-        Task<T> Get(Guid itemId);
-        Task Save();
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetAsync(Guid itemId);
+        Task SaveAsync();
     }
 }

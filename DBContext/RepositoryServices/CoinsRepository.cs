@@ -22,56 +22,40 @@ namespace DBContext.RepositoryServices
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Coins>> GetAll()
+        public async Task<IEnumerable<Coins>> GetAllAsync()
         {
-            _logger.LogError($"Error in {typeof(CoinsRepository)}");
             return await _context.CoinsTable.ToListAsync();
         }
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionHandler.CatchEx(ex));
-            }
+            await _context.SaveChangesAsync();
         }
 
-        public async Task ChangeAmountCoin(Guid coinId, int amount)
+        public async Task ChangeAmountCoinAsync(Guid coinId, int amount)
         {
             if(amount >= 0)
             {
-                Coins coinChange = await Get(coinId);
+                Coins coinChange = await GetAsync(coinId);
                 _context.Entry(coinChange).State = EntityState.Modified;
 
                 coinChange.Amount = amount;
-                await Save();
+                await SaveAsync();
             }
         }
 
-        public async Task ChangeBlockStatusCoin(Guid coinId, bool state)
+        public async Task ChangeBlockStatusCoinAsync(Guid coinId, bool state)
         {
-            Coins coinChange = await Get(coinId);
+            Coins coinChange = await GetAsync(coinId);
             _context.Entry(coinChange).State = EntityState.Modified;
 
             coinChange.IsBlocked = state;
-            await Save();
+            await SaveAsync();
         }
 
-        public async Task<Coins> Get(Guid itemId)
+        public async Task<Coins> GetAsync(Guid itemId)
         {
-            try
-            {
-                return await _context.CoinsTable.Where(c => c.Equals(itemId)).FirstOrDefaultAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionHandler.CatchEx(ex));
-                return null;
-            }
+            return await _context.CoinsTable.Where(c => c.Equals(itemId)).FirstOrDefaultAsync();
         }
 
         private bool disposed = false;

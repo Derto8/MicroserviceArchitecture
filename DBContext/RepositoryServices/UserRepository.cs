@@ -22,30 +22,30 @@ namespace DBContext.RepositoryServices
             _context = context;
         }
 
-        public async Task<Users> Authorization(string login, string pass)
+        public async Task<Users> AuthorizationAsync(string login, string pass)
         {
             Users? user = await _context.UsersTable.Where(c => c.Login == login
                 && c.Password == pass).FirstOrDefaultAsync();
             return user;
         }
 
-        public async Task<Users> Get(Guid itemId)
+        public async Task<Users> GetAsync(Guid itemId)
         {
             return await _context.UsersTable.Where(c => c.Id == itemId).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Users>> GetAll()
+        public async Task<IEnumerable<Users>> GetAllAsync()
         {
             return await _context.UsersTable.ToListAsync();
         }
 
-        public async Task Registration(Users user)
+        public async Task RegistrationAsync(Users user)
         {
             await _context.UsersTable.AddAsync(user);
-            await Save();
+            await SaveAsync();
         }
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
         }

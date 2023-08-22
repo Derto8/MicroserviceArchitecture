@@ -9,7 +9,7 @@ namespace DBContext.Interfaces
 {
     public interface IUserRepository: IBaseRepository<Users>, IDisposable
     {
-        Task Registration(Users user);
-        Task<Users> Authorization(string login, string pass);
+        Task RegistrationAsync(Users user);
+        Task<Users> AuthorizationAsync(string login, string pass);
     }
 }

@@ -21,45 +21,38 @@ namespace DBContext.RepositoryServices
             _logger = logger;
         }
 
-        public async Task Add(Drinks drink)
+        public async Task AddAsync(Drinks drink)
         {
             await _context.DrinksTable.AddAsync(drink);
-            await Save();
+            await SaveAsync();
         }
 
-        public async Task Update(Guid idDrink, Drinks drink)
+        public async Task UpdateAsync(Guid idDrink, Drinks drink)
         {
-            Drinks drinkChange = await Get(idDrink);
+            Drinks drinkChange = await GetAsync(idDrink);
             _context.Entry(drink).State = EntityState.Modified;
-            await Save();
+            await SaveAsync();
         }
 
-        public async Task Delete(Guid idDrink)
+        public async Task DeleteAsync(Guid idDrink)
         {
-            Drinks drinkChange = await Get(idDrink);
+            Drinks drinkChange = await GetAsync(idDrink);
             _context.DrinksTable.Remove(drinkChange);
         }
 
-        public async Task<Drinks> Get(Guid itemId)
+        public async Task<Drinks> GetAsync(Guid itemId)
         {
             return await _context.DrinksTable.Where(c => c.Id == itemId).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Drinks>> GetAll()
+        public async Task<IEnumerable<Drinks>> GetAllAsync()
         {
             return await _context.DrinksTable.ToListAsync();
         }
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionHandler.CatchEx(ex));
-            }
+            await _context.SaveChangesAsync();
         }
 
         private bool disposed = false;
