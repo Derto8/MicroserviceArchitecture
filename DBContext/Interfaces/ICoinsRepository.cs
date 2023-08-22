@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DBContext.Interfaces
 {
-    public interface ICoinsRepository : IBaseRepository<Coins>, IDisposable
+    public interface ICoinsRepository : IBaseRepository<Coins>
     {
         Task ChangeBlockStatusCoinAsync(Guid coinId, bool state);
         Task ChangeAmountCoinAsync(Guid coinId, int amount);

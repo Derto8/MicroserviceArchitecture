@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DBContext.Interfaces
 {
-    public interface IDrinksRepository : IBaseRepository<Drinks>, IDisposable
+    public interface IDrinksRepository : IBaseRepository<Drinks>
     {
         Task AddAsync(Drinks drink);
         Task UpdateAsync(Guid idDrink, Drinks drink);

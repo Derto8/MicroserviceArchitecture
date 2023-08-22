@@ -11,7 +11,7 @@ namespace IntraVisionTestTask.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DrinksController : ControllerBase, IDisposable
+    public class DrinksController : ControllerBase
     {
         private ILogger<DrinksController> _logger { get; set; }
         private IDrinksRepository _drinksRepository { get; set; }
@@ -55,11 +55,6 @@ namespace IntraVisionTestTask.Controllers
         public async Task<IEnumerable<Drinks>> GetAll()
         {
             return await _drinksRepository.GetAllAsync();
-        }
-
-        public void Dispose()
-        {
-            _drinksRepository.Dispose();
         }
     }
 }

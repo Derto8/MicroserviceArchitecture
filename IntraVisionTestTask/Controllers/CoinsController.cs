@@ -11,7 +11,7 @@ namespace IntraVisionTestTask.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CoinsController : ControllerBase, IDisposable
+    public class CoinsController : ControllerBase
     {
         private readonly ILogger<CoinsController> _logger;
         private readonly ICoinsRepository _coinsRepository;
@@ -49,11 +49,6 @@ namespace IntraVisionTestTask.Controllers
         public async Task ChangeBlockStatusCoin(Guid coinId, bool state)
         {
             await _coinsRepository.ChangeBlockStatusCoinAsync(coinId, state);
-        }
-
-        public void Dispose()
-        {
-            _coinsRepository.Dispose();
         }
     }
 }
