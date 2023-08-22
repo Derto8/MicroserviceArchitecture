@@ -15,30 +15,24 @@ namespace AuthMicroservice
         private readonly IConfiguration _configuration;
         public Authorization(
             ILogger<Authorization> logger,
-            IServiceScopeFactory scopeFactory,
+            ApplicationContext context,
             IConfiguration configuration,
             ILogger<UserRepository> loggerRepo)
         {
             _logger = logger;
             _configuration = configuration.GetSection("Authorization");
 
-           // _userRepository = new UserRepository(context, loggerRepo);
+            _userRepository = new UserRepository(context, loggerRepo);
 
-            var scope = scopeFactory.CreateScope();
-            _userRepository = new UserRepository(
-                scope.ServiceProvider.GetRequiredService<ApplicationContext>(),
-                loggerRepo);
+            //var scope = scopeFactory.CreateScope();
+            //_userRepository = new UserRepository(
+            //    scope.ServiceProvider.GetRequiredService<ApplicationContext>(),
+            //    loggerRepo);
         }
 
-        public Task<IResult> AuthorizationMethod(string login, string password, CancellationToken cancellationToken)
+        public async Task<IResult> AuthorizationMethod(string login, string password, CancellationToken cancellationToken)
         {
             Users user = await _userRepository.AuthorizationAsync(login, password, cancellationToken);
-
-            //Users user = new Users()
-            //{
-            //    Login = login,
-            //    Password = password,
-            //};
 
             if (user != null)
             {
