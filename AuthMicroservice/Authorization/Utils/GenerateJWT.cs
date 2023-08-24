@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace AuthMicroservice.AuthClassies
+namespace AuthMicroservice.Authorization.Utils
 {
     public static class GenerateJWT
     {

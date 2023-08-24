@@ -1,7 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace AuthMicroservice.AuthClassies
+namespace AuthMicroservice.Authorization.Utils
 {
     public static class KeyEncryption
     {

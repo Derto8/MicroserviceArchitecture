@@ -1,4 +1,4 @@
-﻿using AuthMicroservice.AuthClassies;
+﻿using AuthMicroservice.Authorization.Utils;
 using AuthMicroservice.Interfaces;
 using DBContext;
 using DBContext.Interfaces;
@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AuthMicroservice
 {
-    public class Authorization : IAuthorization
+    public class AuthorizationImp : IAuthorization
     {
-        private readonly ILogger<Authorization> _logger;
+        private readonly ILogger<AuthorizationImp> _logger;
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
-        public Authorization(
-            ILogger<Authorization> logger,
+        public AuthorizationImp(
+            ILogger<AuthorizationImp> logger,
             ApplicationContext context,
             IConfiguration configuration,
             ILogger<UserRepository> loggerRepo)

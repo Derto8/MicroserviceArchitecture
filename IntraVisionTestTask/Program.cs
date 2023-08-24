@@ -1,6 +1,7 @@
 
 using AuthMicroservice;
-using AuthMicroservice.AuthClassies;
+using AuthMicroservice.Authorization;
+using AuthMicroservice.Authorization.Utils.Services;
 using AuthMicroservice.Controllers;
 using AuthMicroservice.Interfaces;
 using DBContext;
@@ -15,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using Shed.CoreKit.WebApi;
+using System.Security.Cryptography;
 
 namespace IntraVisionTestTask
 {
@@ -26,24 +28,20 @@ namespace IntraVisionTestTask
 
             builder.Services.AddAuthorization();
 
+            builder.Services.Configure<AuthOptions>(
+                builder.Configuration.GetSection(AuthOptions.Autorization));
+
+            builder.Services.ConfigureOptions<JwtBearerOptionsConfiguration>();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer();
+
             //чтобы из DI-контейнера экшонам контроллера присылался cancellationToken
             builder.Services.AddMvc();
-
-            //настройка параметров валидации jwt
-            IConfigurationSection authConfig = builder.Configuration.GetSection("Authorization");
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = authConfig["ISSUER"],
-                    ValidateAudience = true,
-                    ValidAudience = authConfig["AUDIENCE"],
-                    ValidateLifetime = true,
-                    IssuerSigningKey = KeyEncryption.GetSymmetricSecurityKey(authConfig["KEY"]),
-                    ValidateIssuerSigningKey = true,
-                };
-            }); ;
 
             //подключение к бд
             string conn = builder.Configuration.GetConnectionString("ConnectionDataBase");
@@ -62,7 +60,7 @@ namespace IntraVisionTestTask
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Events API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Drinks API", Version = "v1" });
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,

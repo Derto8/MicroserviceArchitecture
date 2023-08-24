@@ -1,10 +1,10 @@
 ﻿using DBContext.Models;
 using System.Security.Claims;
 
-namespace AuthMicroservice.AuthClassies
+namespace AuthMicroservice.Authorization.Utils
 {
-    public static class ClaimSettings 
-    { 
+    public static class ClaimSettings
+    {
         public static List<Claim> GetClaims(Users user, CancellationToken cancellationToken)
         {
             var claims = new List<Claim> {

@@ -1,9 +1,9 @@
-﻿using AuthMicroservice.AuthClassies;
-using AuthMicroservice.Interfaces;
+﻿using AuthMicroservice.Interfaces;
 using DBContext;
 using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Threading;
@@ -11,7 +11,7 @@ using System.Threading;
 namespace AuthMicroservice.Controllers
 {
     [ApiController]
-    [Route("apiMicro/[controller]")]
+    [Route("api/[controller]")]
     public class AuthorizationController : ControllerBase
     {
         private readonly ILogger<AuthorizationController> _logger;
@@ -23,12 +23,12 @@ namespace AuthMicroservice.Controllers
             ApplicationContext context,
             IConfiguration configuration,
             ILogger<UserRepository> loggerRepo,
-            ILogger<Authorization> loggerAuth)
+            ILogger<AuthorizationImp> loggerAuth)
         {
             _logger = logger;
             _configuration = configuration.GetSection("Authorization");
 
-            _authorization = new Authorization(
+            _authorization = new AuthorizationImp(
                 loggerAuth,
                 context,
                 configuration,
@@ -40,6 +40,13 @@ namespace AuthMicroservice.Controllers
         public async Task<IResult> AuthorizationMethod(string login, string password, CancellationToken cancellationToken)
         {
             return await _authorization.AuthorizationMethod(login, password, cancellationToken);
+        }
+
+        [HttpGet(template: "Addsdgfd")]
+        [Authorize]
+        public string Gooo()
+        {
+            return "fdsf";
         }
     }
 }
