@@ -102,10 +102,10 @@ namespace IntraVisionTestTask
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            
+
             // мидлварь обработки исключений
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
