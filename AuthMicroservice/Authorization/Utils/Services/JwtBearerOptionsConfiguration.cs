@@ -25,6 +25,8 @@ namespace AuthMicroservice.Authorization.Utils.Services
 
         public void Configure(JwtBearerOptions options)
         {
+            SecurityKeyProvider securityKeyProvider = new SecurityKeyProvider(_authOptions.KEY);
+
             options.IncludeErrorDetails = true;
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -33,7 +35,7 @@ namespace AuthMicroservice.Authorization.Utils.Services
                 ValidateAudience = true,
                 ValidAudience = _authOptions.AUDIENCE,
                 ValidateLifetime = true,
-                IssuerSigningKey = KeyEncryption.GetSymmetricSecurityKey(_authOptions.KEY),
+                IssuerSigningKey = securityKeyProvider.GetSymmetricSecurityKey(_authOptions.KEY),
                 ValidateIssuerSigningKey = true,
             };
             options.Events = new JwtBearerEvents

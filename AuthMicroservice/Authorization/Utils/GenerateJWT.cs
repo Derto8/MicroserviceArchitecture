@@ -12,12 +12,14 @@ namespace AuthMicroservice.Authorization.Utils
             //настройка клаймов (клайм логина и роли юзера)
             var claims = ClaimSettings.GetClaims(user, cancellationToken);
 
+            SecurityKeyProvider securityKeyProvider = new SecurityKeyProvider(_authOptions.KEY);
+
             JwtSecurityToken jwt = new JwtSecurityToken(
                 issuer: _authOptions.ISSUER,
                 audience: _authOptions.AUDIENCE,
                 claims: claims,
                 expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(10)),
-                signingCredentials: new SigningCredentials(KeyEncryption.GetSymmetricSecurityKey(_authOptions.KEY), SecurityAlgorithms.HmacSha256)
+                signingCredentials: new SigningCredentials(securityKeyProvider.GetSymmetricSecurityKey(_authOptions.KEY), SecurityAlgorithms.HmacSha256)
             );
 
             //подписываю токен
