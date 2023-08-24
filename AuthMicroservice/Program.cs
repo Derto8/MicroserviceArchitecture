@@ -22,20 +22,6 @@ namespace AuthMicroservice
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddAuthorization();
-            //настройка параметров валидации jwt
-            builder.Services.Configure<AuthOptions>(
-                builder.Configuration.GetSection(AuthOptions.Autorization));
-
-            builder.Services.ConfigureOptions<JwtBearerOptionsConfiguration>();
-
-            builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer();
-
 
             builder.Services.AddCorrelationToken();
             builder.Services.AddCors();
@@ -55,10 +41,6 @@ namespace AuthMicroservice
             builder.Services.AddTransient<HttpClient>();
 
             var app = builder.Build();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
 
             app.MapControllers();
 

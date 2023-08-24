@@ -1,10 +1,12 @@
-﻿using AuthMicroservice.Authorization.Utils;
+﻿using AuthMicroservice.Authorization;
+using AuthMicroservice.Authorization.Utils;
 using AuthMicroservice.Interfaces;
 using DBContext;
 using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace AuthMicroservice
 {
@@ -12,22 +14,16 @@ namespace AuthMicroservice
     {
         private readonly ILogger<AuthorizationImp> _logger;
         private readonly IUserRepository _userRepository;
-        private readonly IConfiguration _configuration;
+        private AuthOptions _authOptions;
         public AuthorizationImp(
             ILogger<AuthorizationImp> logger,
             ApplicationContext context,
-            IConfiguration configuration,
-            ILogger<UserRepository> loggerRepo)
+            ILogger<UserRepository> loggerRepo,
+            IOptions<AuthOptions> options)
         {
             _logger = logger;
-            _configuration = configuration.GetSection("Authorization");
-
             _userRepository = new UserRepository(context, loggerRepo);
-
-            //var scope = scopeFactory.CreateScope();
-            //_userRepository = new UserRepository(
-            //    scope.ServiceProvider.GetRequiredService<ApplicationContext>(),
-            //    loggerRepo);
+            _authOptions = options.Value;
         }
 
         public async Task<IResult> AuthorizationMethod(string login, string password, CancellationToken cancellationToken)
@@ -36,7 +32,7 @@ namespace AuthMicroservice
 
             if (user != null)
             {
-                IResult jwt = GenerateJWT.Generate(user, _configuration, cancellationToken);
+                IResult jwt = GenerateJWT.Generate(user, _authOptions, cancellationToken);
 
                 _logger.LogInformation($"Юзер авторизировался: {login}");
 

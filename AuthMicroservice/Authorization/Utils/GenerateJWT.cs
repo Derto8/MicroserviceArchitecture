@@ -1,4 +1,5 @@
 ﻿using DBContext.Models;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -6,17 +7,17 @@ namespace AuthMicroservice.Authorization.Utils
 {
     public static class GenerateJWT
     {
-        public static IResult Generate(Users user, IConfiguration configuration, CancellationToken cancellationToken)
+        public static IResult Generate(Users user, AuthOptions _authOptions, CancellationToken cancellationToken)
         {
             //настройка клаймов (клайм логина и роли юзера)
             var claims = ClaimSettings.GetClaims(user, cancellationToken);
 
             JwtSecurityToken jwt = new JwtSecurityToken(
-                issuer: configuration["ISSUER"],
-                audience: configuration["AUDIENCE"],
+                issuer: _authOptions.ISSUER,
+                audience: _authOptions.AUDIENCE,
                 claims: claims,
                 expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(10)),
-                signingCredentials: new SigningCredentials(KeyEncryption.GetSymmetricSecurityKey(configuration["KEY"]), SecurityAlgorithms.HmacSha256)
+                signingCredentials: new SigningCredentials(KeyEncryption.GetSymmetricSecurityKey(_authOptions.KEY), SecurityAlgorithms.HmacSha256)
             );
 
             //подписываю токен

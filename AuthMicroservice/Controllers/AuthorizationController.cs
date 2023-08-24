@@ -1,10 +1,12 @@
-﻿using AuthMicroservice.Interfaces;
+﻿using AuthMicroservice.Authorization;
+using AuthMicroservice.Interfaces;
 using DBContext;
 using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Threading;
 
@@ -21,18 +23,17 @@ namespace AuthMicroservice.Controllers
         public AuthorizationController(
             ILogger<AuthorizationController> logger,
             ApplicationContext context,
-            IConfiguration configuration,
+            IOptions<AuthOptions> authOptions,
             ILogger<UserRepository> loggerRepo,
             ILogger<AuthorizationImp> loggerAuth)
         {
             _logger = logger;
-            _configuration = configuration.GetSection("Authorization");
 
             _authorization = new AuthorizationImp(
                 loggerAuth,
                 context,
-                configuration,
-                loggerRepo);
+                loggerRepo,
+                authOptions);
         }
 
         //  [HttpPost(template: "AuthMethod")]
