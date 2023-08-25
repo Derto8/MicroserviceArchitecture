@@ -14,7 +14,7 @@ namespace AuthMicroservice
     {
         private readonly ILogger<AuthorizationImp> _logger;
         private readonly IUserRepository _userRepository;
-        private AuthOptions _authOptions;
+        private IOptions<AuthOptions> _authOptions;
         public AuthorizationImp(
             ILogger<AuthorizationImp> logger,
             ApplicationContext context,
@@ -23,7 +23,7 @@ namespace AuthMicroservice
         {
             _logger = logger;
             _userRepository = new UserRepository(context, loggerRepo);
-            _authOptions = options.Value;
+            _authOptions = options;
         }
 
         public async Task<IResult> AuthorizationMethod(string login, string password, CancellationToken cancellationToken)

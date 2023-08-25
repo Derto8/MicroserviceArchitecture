@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shed.CoreKit.WebApi;
 using System.Security.Cryptography;
+using AuthMicroservice.Authorization.Utils.KeyProviders;
 
 namespace AuthMicroservice
 {
@@ -29,6 +30,8 @@ namespace AuthMicroservice
             builder.Services.AddMvcCore();
 
             builder.Services.AddControllers();
+
+            builder.Services.AddSingleton<IPublicKeyProvider, PublicKeyProvider>();
 
             //подключение бд
             string conn = builder.Configuration.GetConnectionString("ConnectionDataBase");
