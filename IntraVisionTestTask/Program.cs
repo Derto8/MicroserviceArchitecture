@@ -33,6 +33,7 @@ namespace IntraVisionTestTask
 
             builder.Services.ConfigureOptions<JwtBearerOptionsConfiguration>();
 
+            //добавление аутентификации
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -51,7 +52,7 @@ namespace IntraVisionTestTask
             });
 
             //игнорируем ссылка на циклы и не сериализируем их
-            builder.Services.AddControllers().AddNewtonsoftJson(opt =>
+            builder.Services.AddControllersWithViews().AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
@@ -93,14 +94,16 @@ namespace IntraVisionTestTask
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
+
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -109,7 +112,9 @@ namespace IntraVisionTestTask
             // мидлварь обработки исключений
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-            app.MapControllers();
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Drinks}/{action=GetAll}");
 
             //настройка корсов
             app.UseCors(builder =>

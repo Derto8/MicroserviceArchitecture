@@ -1,0 +1,187 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+.needHideFirst {
+    display: none;
+    overflow: hidden;
+}
+
+.disable {
+    pointer-events: none;
+    cursor: default;
+}
+
+.widthForButton{
+    width: 90%;
+}
+
+.overhang {
+    position: fixed;
+    display: none;
+    width: 100%;
+    z-index: 9999;
+    padding: 15px 2px;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    box-sizing: border-box
+}
+
+.overhang-message {
+    color: #fff;
+    font-size: 20px
+}
+
+    .overhang-message strong {
+        font-weight: 700
+    }
+
+    .overhang-message a {
+        color: inherit
+    }
+
+        .overhang-message a:hover {
+            text-decoration: none
+        }
+
+.overhang-overlay {
+    position: fixed;
+    display: block;
+    background-color: #000;
+    opacity: .6;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9998
+}
+
+.overhang-prompt-field {
+    height: 30px;
+    width: 250px;
+    border-radius: 5px;
+    border: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    bottom: 7px;
+    position: relative;
+    padding-left: 3px;
+    padding-right: 3px;
+    outline: 0;
+    font-family: Roboto,sans-serif;
+    font-size: 15px
+}
+
+.overhang-no-option, .overhang-yes-option {
+    min-width: 50px;
+    height: 30px;
+    border: none;
+    outline: 0;
+    border-radius: 4px;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+    margin: 0 6px
+}
+
+.overhang-yes-option {
+    margin-left: 15px
+}
+
+.overhang-close {
+    vertical-align: middle;
+    cursor: pointer;
+    margin-top: -4px;
+    padding-left: 13px;
+    font-size: 2em;
+    font-weight: 700;
+    display: inline-block;
+    line-height: 20px
+}
+
+    .overhang-close:after {
+        content: "\00d7"
+    }
+
+@media (max-width:720px) {
+    .overhang-close {
+        font-size: 2em;
+        line-height: 14px
+    }
+
+    .overhang-message {
+        font-size: 15px
+    }
+}
