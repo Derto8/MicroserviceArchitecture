@@ -1,6 +1,7 @@
 
 using AuthMicroservice;
 using AuthMicroservice.Authorization;
+using AuthMicroservice.Authorization.Utils.KeyProviders;
 using AuthMicroservice.Authorization.Utils.Services;
 using AuthMicroservice.Controllers;
 using AuthMicroservice.Interfaces;
@@ -90,6 +91,7 @@ namespace IntraVisionTestTask
 
             builder.Services.AddTransient<ICoinsRepository, CoinsRepository>();
             builder.Services.AddTransient<IDrinksRepository, DrinksRepository>();
+            builder.Services.AddTransient<IPublicKeyProvider, PublicKeyProvider>();
 
             var app = builder.Build();
 
