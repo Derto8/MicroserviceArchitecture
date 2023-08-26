@@ -52,7 +52,7 @@ namespace IntraVisionTestTask
             });
 
             //игнорируем ссылка на циклы и не сериализируем их
-            builder.Services.AddControllers().AddNewtonsoftJson(opt =>
+            builder.Services.AddControllersWithViews().AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
@@ -100,12 +100,21 @@ namespace IntraVisionTestTask
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Drinks}/{action=GetAll}/{id?}");
 
 
             // мидлварь обработки исключений

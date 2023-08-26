@@ -5,13 +5,12 @@ using DBContext.Models;
 using DBContext.RepositoryServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Data;
 
 namespace IntraVisionTestTask.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class DrinksController : ControllerBase
+    public class DrinksController : Controller
     {
         private ILogger<DrinksController> _logger { get; set; }
         private IDrinksRepository _drinksRepository { get; set; }
@@ -51,10 +50,9 @@ namespace IntraVisionTestTask.Controllers
             return await _drinksRepository.GetAsync(idDrink, cancellationToken);
         }
 
-        [HttpGet(template: "GetAllDrinks")]
-        public async Task<IEnumerable<Drinks>> GetAll(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            return await _drinksRepository.GetAllAsync(cancellationToken);
+            return View(await _drinksRepository.GetAllAsync(cancellationToken));
         }
     }
 }
