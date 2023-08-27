@@ -3,6 +3,7 @@ using DBContext.Enums;
 using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
+using IntraVisionTestTask.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -14,14 +15,17 @@ namespace IntraVisionTestTask.Controllers
     {
         private ILogger<DrinksController> _logger { get; set; }
         private IDrinksRepository _drinksRepository { get; set; }
+        private ICoinsRepository _coinsRepository { get; set; }
 
         public DrinksController(
             ILogger<DrinksController> logger,
             ILogger<DrinksRepository> loggerRepo,
+            ILogger<CoinsRepository> coinRepository,
             ApplicationContext context)
         {
             _logger = logger;
             _drinksRepository = new DrinksRepository(context, loggerRepo);
+            _coinsRepository = new CoinsRepository(context, coinRepository);
         }
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
@@ -44,15 +48,23 @@ namespace IntraVisionTestTask.Controllers
         {
             await _drinksRepository.DeleteAsync(idDrink, cancellationToken);
         }
-        [HttpPost(template: "GetDrink")]
-        public async Task<Drinks> Get(Guid idDrink, CancellationToken cancellationToken)
+
+        [HttpPost]
+        public async Task<JsonResult> Get([FromBody]Guid idDrink, CancellationToken cancellationToken)
         {
-            return await _drinksRepository.GetAsync(idDrink, cancellationToken);
+            return Json(await _drinksRepository.GetAsync(idDrink, cancellationToken));
         }
 
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            return View(await _drinksRepository.GetAllAsync(cancellationToken));
+            var drinks = await _drinksRepository.GetAllAsync(cancellationToken);
+            var coins = await _coinsRepository.GetAllAsync(cancellationToken);
+            var coindDrinks = new DrinksCoins()
+            {
+                Coins = coins,
+                Drinks = drinks
+            };
+            return View(coindDrinks);
         }
     }
 }

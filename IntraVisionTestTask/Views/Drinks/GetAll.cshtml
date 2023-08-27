@@ -1,20 +1,83 @@
-﻿@model IEnumerable<Drinks>
+﻿@model DrinksCoins
 
 <div class="row mt-3 mb-2">
     @{
-        foreach (var drink in Model)
+        Users? user = HttpContextAccessor.HttpContext.Session.Get<Users>("user");
+        if(user != null && user.Role == RoleEnum.Admin)
+        {
+            <p><a class="btn btn-success w-100" name="button" asp-controller="" asp-action="">Добавить</a></p>
+        }
+        foreach (var drink in Model.Drinks)
         {
             <div class="col-lg-5 m-4 shadow mb-5">
-                <img class="img-thumbnail m-4 p-5" src="" alt="Картинка отсутствует" />
+                <img class="img-fluid rounded mx-auto d-block" width="200" height="300" src="@drink.Img" alt="Картинка отсутствует" />
                 <div class="ml-4 pr-4 mt-2 text-dark" name="main">
                     <p>Название: @drink.Name</p>
                     <p>Цена: @drink.Price</p>
-                    <p>Количетсво: @drink.Amount</p>
+                    <p>Количество: @drink.Amount</p>
+
+                    @{
+                        if (user != null)
+                        {
+                            if (user.Role == RoleEnum.User)
+                            {
+                                <p name="addToCart"><a class="btn btn-outline-warning w-100" name="button" id="@drink.Id">Купить</a></p>
+                            }
+                            if (user.Role == RoleEnum.Admin)
+                            {
+                                <div class="m-3" name="needHide" id="@drink.Id">
+                                    <a class="btn btn-outline-success mb-5 mt-4 w-100">Редактирование</a>
+                                </div>
+                                <div class="needHideFirst m-3" name="needShow">
+                                    <p><a class="btn btn-warning w-100" name="button" asp-controller="" asp-action="">Изменить</a></p>
+                                    <p><a class="btn btn-danger w-100" name="button" asp-controller="" asp-action="">Удалить</a></p>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p><a class="btn btn-warning w-100 disabled">Нужно авторизироваться</a></p>
+                        }
+                    }
                 </div>
             </div>
         }
     }
 </div>
-<script>
 
-</script>
+@section Scripts{
+    <script>
+
+        $('div[name="needShow"]').hide();
+
+        $('div[name="main"]').children('div[name="needHide"]').click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Get", "Drinks")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify($(this).attr('id')),
+                dataType: "json",
+                success: SuccessShopCart,
+                error: AjaxError
+            })
+
+            $(this).slideDown();
+            $('div[name="needShow"]').slideUp();
+
+            $(this).parent().children('div[name="needShow"]').show();
+            $(this).hide();
+
+            function SuccessShopCart(data) {
+                console.log(data);
+            }
+
+            function AjaxError() {
+                $("body").overhang({
+                    type: "error",
+                    message: AjaxError.name,
+                });
+            }
+        })
+    </script>
+}
