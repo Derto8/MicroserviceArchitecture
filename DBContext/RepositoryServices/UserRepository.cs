@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,15 +40,37 @@ namespace DBContext.RepositoryServices
             return await _context.UsersTable.ToListAsync(cancellationToken);
         }
 
-        public async Task RegistrationAsync(Users user, CancellationToken cancellationToken)
+        public async Task<HttpStatusCode> RegistrationAsync(string login, string pass, CancellationToken cancellationToken)
         {
-            await _context.UsersTable.AddAsync(user, cancellationToken);
-            await SaveAsync(cancellationToken);
+            if(await FindUserByLoginAsync(login, cancellationToken))
+            {
+                Users user = new Users()
+                {
+                    Id = Guid.NewGuid(),
+                    Login = login,
+                    Password = pass,
+                    Role = Enums.RoleEnum.User
+                };
+
+                await _context.UsersTable.AddAsync(user, cancellationToken);
+                await SaveAsync(cancellationToken);
+                _logger.LogInformation($"{login} - зарегистрировался");
+                return HttpStatusCode.OK;
+            }
+            return HttpStatusCode.Conflict;
         }
 
         public async Task SaveAsync(CancellationToken cancellationToken)
         {
             await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<bool> FindUserByLoginAsync(string login, CancellationToken cancellationToken)
+        {
+            Users user = await _context.UsersTable.Where(c => c.Login == login).FirstOrDefaultAsync(cancellationToken);
+            if (user == null)
+                return true;
+            return false;
         }
     }
 }

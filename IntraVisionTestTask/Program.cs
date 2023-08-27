@@ -57,49 +57,26 @@ namespace IntraVisionTestTask
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
-            //добавление авторизации в сваггер
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(options =>
+            //добавление сессии
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(opt =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Drinks API", Version = "v1" });
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter a valid token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "Bearer"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] {}
-                    }
-                });
+                opt.Cookie.Name = "Application.Session";
+                opt.IdleTimeout = TimeSpan.FromMinutes(5);
+                opt.Cookie.IsEssential = true;
             });
 
             builder.Services.AddCors();
 
             builder.Services.AddTransient<ICoinsRepository, CoinsRepository>();
             builder.Services.AddTransient<IDrinksRepository, DrinksRepository>();
-            builder.Services.AddTransient<IPublicKeyProvider, PublicKeyProvider>();
+            builder.Services.AddSingleton<IPublicKeyProvider, PublicKeyProvider>();
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
@@ -112,13 +89,15 @@ namespace IntraVisionTestTask
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSession();
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Drinks}/{action=GetAll}/{id?}");
 
 
             // мидлварь обработки исключений
-            app.UseMiddleware<ExceptionHandlingMiddleware>();
+          //  app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.MapControllers();
 

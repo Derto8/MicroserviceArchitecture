@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using System.Net;
 using System.Threading;
 
 namespace AuthMicroservice.Controllers
@@ -41,6 +42,12 @@ namespace AuthMicroservice.Controllers
         public async Task<IResult> AuthorizationMethod(string login, string password, CancellationToken cancellationToken)
         {
             return await _authorization.AuthorizationMethod(login, password, cancellationToken);
+        }
+
+        [HttpPost, Route("registration/{login}/{password}")]
+        public async Task<HttpStatusCode> RegistrationMethod(string login, string password, CancellationToken cancellationToken)
+        {
+            return await _authorization.RegistrationMethod(login, password, cancellationToken);
         }
 
         [HttpGet(template: "Addsdgfd")]

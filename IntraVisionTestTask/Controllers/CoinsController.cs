@@ -25,7 +25,6 @@ namespace IntraVisionTestTask.Controllers
             _coinsRepository = new CoinsRepository(context, loggerRepo);
         }
 
-        [HttpGet(template: "GetAllCoins")]
         public async Task<IEnumerable<Coins>> GetAllCoins(CancellationToken cancellationToken)
         {
             return await _coinsRepository.GetAllAsync(cancellationToken);

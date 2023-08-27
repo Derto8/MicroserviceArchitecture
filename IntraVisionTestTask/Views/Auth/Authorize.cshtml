@@ -1,0 +1,23 @@
+﻿@model JWT
+
+<form class="p-4 shadow" method="post" enctype="multipart/form-data">
+    <h1 class="display-4">Авторизация</h1>
+
+    <div class="form-group mb-2">
+        <label>Логин</label>
+        <input class="form-control" name="Login" placeholder="Введите логин">
+    </div>
+
+    <div class="form-group mb-2">
+        <label>Пароль</label>
+        <input class="form-control mb-3" name="Password" type="password" placeholder="Введите пароль">
+    </div>
+
+    <input type="submit" class="btn btn-outline-success w-100"/>
+
+    <p class="text-danger">@ViewBag.Error</p>
+</form>
+
+<script>
+
+</script>

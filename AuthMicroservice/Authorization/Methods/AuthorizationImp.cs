@@ -7,6 +7,7 @@ using DBContext.Models;
 using DBContext.RepositoryServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace AuthMicroservice
 {
@@ -41,7 +42,17 @@ namespace AuthMicroservice
             _logger.LogInformation($"Юзер не смог авторизироваться\n" +
                 $"Login: {login}, Pass: {password}");
 
-            return null;
+            var jsonResult = new
+            {
+                StatusCode = 401
+            };
+
+            return Results.Json(jsonResult);
+        }
+
+        public async Task<HttpStatusCode> RegistrationMethod(string login, string password, CancellationToken cancellationToken)
+        {
+            return await _userRepository.RegistrationAsync(login, password, cancellationToken);
         }
     }
 }

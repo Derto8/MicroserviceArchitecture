@@ -11,7 +11,6 @@ namespace AuthMicroservice.Authorization.Utils.Services
         public JwtBearerOptionsConfiguration(
             IOptions<AuthOptions> authOptions,
             ILogger<JwtBearerOptions> logger,
-            IPublicKeyProvider publicKeyProvider,
             IServiceProvider serviceProvider)
         {
             _authOptions = authOptions.Value;

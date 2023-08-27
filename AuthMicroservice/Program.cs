@@ -30,6 +30,8 @@ namespace AuthMicroservice
             builder.Services.AddMvcCore();
 
             builder.Services.AddControllers();
+            builder.Services.Configure<AuthOptions>(
+                builder.Configuration.GetSection(AuthOptions.Autorization));
 
             builder.Services.AddSingleton<IPublicKeyProvider, PublicKeyProvider>();
 
@@ -41,7 +43,6 @@ namespace AuthMicroservice
             });
 
             builder.Services.AddTransient<IAuthorization, AuthorizationImp>();
-            builder.Services.AddTransient<HttpClient>();
 
             var app = builder.Build();
 
