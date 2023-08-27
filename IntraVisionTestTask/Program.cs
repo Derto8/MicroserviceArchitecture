@@ -9,6 +9,7 @@ using DBContext;
 using DBContext.Interfaces;
 using DBContext.RepositoryServices;
 using GlobalExceptionHandling.Middlewares;
+using IntraVisionTestTask.DTOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -29,9 +30,15 @@ namespace IntraVisionTestTask
 
             builder.Services.AddAuthorization();
 
+            //конфигурация микросервиса авторизации
+            builder.Services.Configure<AuthorizationMicroserviceOptions>(
+                builder.Configuration.GetSection(AuthorizationMicroserviceOptions.Microservice));
+
+            //конфигурация авторизации
             builder.Services.Configure<AuthOptions>(
                 builder.Configuration.GetSection(AuthOptions.Autorization));
 
+            //настройки аутентификации токена
             builder.Services.ConfigureOptions<JwtBearerOptionsConfiguration>();
 
             builder.Services.AddAuthentication(options =>
@@ -51,7 +58,7 @@ namespace IntraVisionTestTask
                 opt.UseSqlServer(conn);
             });
 
-            //игнорируем ссылка на циклы и не сериализируем их
+            //игнорируем ссылки на циклы и не сериализируем их
             builder.Services.AddControllersWithViews().AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

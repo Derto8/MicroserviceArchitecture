@@ -1,16 +1,17 @@
 ﻿using IntraVisionTestTask.DTOs;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Options;
 
 namespace IntraVisionTestTask.Requests
 {
     public static class PostRequests
     {
-        public static async Task<JWT> Authorize(string login, string pass, IConfiguration conf)
+        public static async Task<JWT> Authorize(string login, string pass, AuthorizationMicroserviceOptions opt)
         {
             using (var client = new HttpClient())
             {
-                using var request = new HttpRequestMessage(HttpMethod.Post, $"{conf["Addres"]}:5001/api/Authorization/authuser/{login}/{pass}");
+                using var request = new HttpRequestMessage(HttpMethod.Post, $"{opt.Addres}/api/Authorization/authuser/{login}/{pass}");
 
                 using var responce = await client.SendAsync(request);
 
@@ -23,11 +24,11 @@ namespace IntraVisionTestTask.Requests
             }
         }
 
-        public static async Task<bool> Registration(string login, string pass, IConfiguration conf)
+        public static async Task<bool> Registration(string login, string pass, AuthorizationMicroserviceOptions opt)
         {
             using (var client = new HttpClient())
             {
-                using var request = new HttpRequestMessage(HttpMethod.Post, $"{conf["Addres"]}:5001/api/Authorization/registration/{login}/{pass}");
+                using var request = new HttpRequestMessage(HttpMethod.Post, $"{opt.Addres}:5001/api/Authorization/registration/{login}/{pass}");
                 using var responce = await client.SendAsync(request);
 
                 var status = await responce.Content.ReadAsStringAsync();

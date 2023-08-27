@@ -1,9 +1,12 @@
 ﻿using AuthMicroservice.Controllers;
+using DBContext.Models;
 using IntraVisionTestTask.DTOs;
+using IntraVisionTestTask.Extensions;
 using IntraVisionTestTask.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Abstractions;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
@@ -12,14 +15,14 @@ namespace IntraVisionTestTask.Controllers
     public class AuthController : Controller
     {
         private ILogger<AuthController> _logger;
-        private IConfiguration _configuration;
+        private AuthorizationMicroserviceOptions _microserviceOpt;
 
         public AuthController(
             ILogger<AuthController> logger,
-            IConfiguration configuration)
+            IOptions<AuthorizationMicroserviceOptions> microserviceOpt)
         {
             _logger = logger;
-            _configuration = configuration;
+            _microserviceOpt = microserviceOpt.Value;
         }
 
         public IActionResult Authorize()
@@ -28,20 +31,22 @@ namespace IntraVisionTestTask.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Authorize(string Login, string Password)
+        public async Task<IActionResult> Authorize(string Login, string Password, CancellationToken token)
         {
             if (ModelState.IsValid)
             {
-                JWT jwt = await PostRequests.Authorize(Login, Password, _configuration);
+                JWT jwt = await PostRequests.Authorize(Login, Password, _microserviceOpt);
                 if (jwt != null)
                 {
                     HttpContext.Session.SetString("token", jwt.access_token);
-                    return RedirectToAction("GetAll", "Drinks");
+                    //HttpContext.Session.Set<JWT>("", jwt);
+
+                    return RedirectToAction("GetAll", "Drinks", token);
                 }
                 else
                 {
                     ViewBag.Error = "Такого пользователя не существует!";
-                    return View();
+                    return View(token);
                 }
             }
             return View(Login, Password);
@@ -53,20 +58,20 @@ namespace IntraVisionTestTask.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Registration(string Login, string Password)
+        public async Task<IActionResult> Registration(string Login, string Password, CancellationToken token)
         {
             if (ModelState.IsValid)
             {
-                bool status = await PostRequests.Registration(Login, Password, _configuration);
+                bool status = await PostRequests.Registration(Login, Password, _microserviceOpt);
                 if(status)
-                    return RedirectToAction("Authorize");
+                    return RedirectToAction("Authorize", token);
                 else
                 {
                     ViewBag.Error = "Такой пользователь уже существует!";
-                    return View();
+                    return View(token);
                 }
             }
-            return View(Login, Password);
+            return View(token);
         }
     }
 }
