@@ -77,7 +77,9 @@ namespace IntraVisionTestTask
 
             builder.Services.AddTransient<ICoinsRepository, CoinsRepository>();
             builder.Services.AddTransient<IDrinksRepository, DrinksRepository>();
+            
             builder.Services.AddSingleton<IPublicKeyProvider, PublicKeyProvider>();
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var app = builder.Build();
 
@@ -117,10 +119,8 @@ namespace IntraVisionTestTask
                     .AllowAnyHeader();
             });
 
-            string address = builder.Configuration["Addres"];
-
             //перенаправление на микросервис по порту 5001
-            app.UseWebApiRedirect("api/auth", new WebApiEndpoint<IAuthorization>(new Uri($"{address}:5001"))); 
+           // app.UseWebApiRedirect("api/auth", new WebApiEndpoint<IAuthorization>(new Uri($"{address}:5001"))); 
 
             app.Run();
         }

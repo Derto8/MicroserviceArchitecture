@@ -1,8 +1,12 @@
 ﻿using AuthMicroservice.Controllers;
+using DBContext;
+using DBContext.Interfaces;
 using DBContext.Models;
+using DBContext.RepositoryServices;
 using IntraVisionTestTask.DTOs;
 using IntraVisionTestTask.Extensions;
 using IntraVisionTestTask.Requests;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -16,13 +20,17 @@ namespace IntraVisionTestTask.Controllers
     {
         private ILogger<AuthController> _logger;
         private AuthorizationMicroserviceOptions _microserviceOpt;
+        private IUserRepository _userRepository;
 
         public AuthController(
             ILogger<AuthController> logger,
-            IOptions<AuthorizationMicroserviceOptions> microserviceOpt)
+            IOptions<AuthorizationMicroserviceOptions> microserviceOpt,
+            ApplicationContext context,
+            ILogger<UserRepository> loggerRepo)
         {
             _logger = logger;
             _microserviceOpt = microserviceOpt.Value;
+            _userRepository = new UserRepository(context, loggerRepo);
         }
 
         public IActionResult Authorize()
@@ -36,10 +44,11 @@ namespace IntraVisionTestTask.Controllers
             if (ModelState.IsValid)
             {
                 JWT jwt = await PostRequests.Authorize(Login, Password, _microserviceOpt);
-                if (jwt != null)
+                Users user = await _userRepository.GetAsync(jwt.userId, token);
+                if (jwt != null && user != null)
                 {
                     HttpContext.Session.SetString("token", jwt.access_token);
-                    //HttpContext.Session.Set<JWT>("", jwt);
+                    HttpContext.Session.Set<Users>("user", user);
 
                     return RedirectToAction("GetAll", "Drinks", token);
                 }

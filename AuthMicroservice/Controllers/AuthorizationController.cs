@@ -18,7 +18,6 @@ namespace AuthMicroservice.Controllers
     public class AuthorizationController : ControllerBase
     {
         private readonly ILogger<AuthorizationController> _logger;
-        private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly IAuthorization _authorization;
         public AuthorizationController(

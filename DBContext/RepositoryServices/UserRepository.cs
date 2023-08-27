@@ -55,6 +55,7 @@ namespace DBContext.RepositoryServices
                 await _context.UsersTable.AddAsync(user, cancellationToken);
                 await SaveAsync(cancellationToken);
                 _logger.LogInformation($"{login} - зарегистрировался");
+
                 return HttpStatusCode.OK;
             }
             return HttpStatusCode.Conflict;

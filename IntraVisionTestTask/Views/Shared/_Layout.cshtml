@@ -19,7 +19,8 @@
                 </button>
                 @{
                     string jwt = HttpContextAccessor.HttpContext.Session.GetString("token");
-                    if (jwt == null)
+                    Users user = HttpContextAccessor.HttpContext.Session.Get<Users>("user");
+                    if (jwt == null && user == null)
                     {
                         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                             <ul class="navbar-nav flex-grow-1">
@@ -35,7 +36,7 @@
                             </ul>
                         </div>
                     }
-                    else
+                    if (jwt != null && user != null)
                     {
                         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                             <ul class="navbar-nav flex-grow-1">
@@ -43,7 +44,7 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Drinks" asp-action="GetAll">Напитки</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark">Авторизация</a>
+                                    <a class="nav-link text-dark">@user.Login</a>
                                 </li>
                             </ul>
                         </div>

@@ -3,6 +3,6 @@
     public class JWT
     {
         public string access_token { get; set; }
-        public string userId { get; set; }
+        public Guid userId { get; set; }
     }
 }
