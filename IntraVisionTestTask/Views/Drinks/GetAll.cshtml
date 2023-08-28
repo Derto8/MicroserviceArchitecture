@@ -5,7 +5,7 @@
         Users? user = HttpContextAccessor.HttpContext.Session.Get<Users>("user");
         if(user != null && user.Role == RoleEnum.Admin)
         {
-            <p><a class="btn btn-success w-100" name="button" asp-controller="" asp-action="">Добавить</a></p>
+            <p><a class="btn btn-success w-100" name="button" asp-controller="Drinks" asp-action="Add">Добавить</a></p>
         }
 
         <div class="container">
@@ -49,12 +49,9 @@
                             }
                             if (user.Role == RoleEnum.Admin)
                             {
-                                //<div class="m-3" name="needHide" id="@drink.Id">
-                                //    <a class="btn btn-outline-success mb-5 mt-4 w-100">Редактирование</a>
-                                //</div>
-                                <div class="needHideFirst m-3" name="needShow">
+                                <div class="m-3" name="adminFunctions">
                                     <p><a class="btn btn-warning w-100" name="button" asp-controller="Drinks" asp-action="Update" asp-route-idDrink="@drink.Id">Изменить</a></p>
-                                    <p><a class="btn btn-danger w-100" name="button" asp-controller="" asp-action="">Удалить</a></p>
+                                    <p name="buttonDel" id="@drink.Id"><a class="btn btn-danger w-100">Удалить</a></p>
                                 </div>
                             }
                         }
@@ -70,38 +67,30 @@
 </div>
 
 @section Scripts{
-@*    <script>
+    <script>
+        //$('div[name="main"]').children('div[name="adminFunctions"]').click(function () {
 
-        $('div[name="needShow"]').hide();
+        //    $.ajax({
+        //        type: "GET",
+        //        url: '@Url.Action("Update", "Drinks")',
+        //        contentType: "application/json; charset=utf-8",
+        //        data: JSON.stringify($(this).attr('id')),
+        //        dataType: "json",
+        //        beforeSend: function (xhr) {
+        //            xhr.setRequestHeader("Authorization", 'Bearer ');
+        //        }
+        //    })
+        //})
 
-        $('div[name="main"]').children('div[name="needHide"]').click(function () {
-            
+        $('div[name="main"]').children('div[name="adminFunctions"]').children('p[name="buttonDel"]').click(function () {
+
             $.ajax({
-                type: "POST",
-                url: '@Url.Action("Get", "Drinks")',
+                type: "DELETE",
+                url: '@Url.Action("Delete", "Drinks")',
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify($(this).attr('id')),
                 dataType: "json",
-                success: SuccessShopCart,
-                error: AjaxError
-            })
-
-            $(this).slideDown();
-            $('div[name="needShow"]').slideUp();
-
-            $(this).parent().children('div[name="needShow"]').show();
-            $(this).hide();
-
-            function SuccessShopCart(data) {
-                console.log(data);
-            }
-
-            function AjaxError() {
-                $("body").overhang({
-                    type: "error",
-                    message: AjaxError.name,
-                });
-            }
+                })
         })
-    </script>*@
+    </script>
 }

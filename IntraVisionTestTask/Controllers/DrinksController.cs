@@ -4,6 +4,7 @@ using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
 using IntraVisionTestTask.DTOs;
+using IntraVisionTestTask.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -28,20 +29,38 @@ namespace IntraVisionTestTask.Controllers
             _coinsRepository = new CoinsRepository(context, coinRepository);
         }
 
-        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
-        [HttpPost(template: "AddDrink")]
-        public async Task Add(Drinks drink, CancellationToken cancellationToken)
+        [HttpGet]
+        public IActionResult Add()
         {
+            return View();
+        }
+
+        //[Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
+        [HttpPost]
+        public async Task<IActionResult> Add(string name, decimal price,
+            int amount, string img, CancellationToken cancellationToken)
+        {
+            var drink = new Drinks
+            {
+                Name = name,
+                Price = price,
+                Amount = amount,
+                Img = img,
+            };
+
             await _drinksRepository.AddAsync(drink, cancellationToken);
+            return RedirectToAction("GetAll");
         }
 
         [HttpGet]
+        //[Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         public async Task<IActionResult> Update(Guid idDrink, CancellationToken cancellationToken)
         {
             return View(await _drinksRepository.GetAsync(idDrink, cancellationToken));
         }
 
         [HttpPost]
+        //[Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         public async Task<IActionResult> Update(Guid idDrink, string name, decimal price, 
             int amount, string img, CancellationToken cancellationToken)
         {
@@ -57,17 +76,11 @@ namespace IntraVisionTestTask.Controllers
         }
 
         //[Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
-        //[HttpPut]
-        //public async Task Update(Guid idDrink, Drinks drink, CancellationToken cancellationToken)
-        //{
-        //    await _drinksRepository.UpdateAsync(idDrink, drink, cancellationToken);
-        //}
-
-        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
-        [HttpDelete(template: "DeleteDrink")]
-        public async Task Delete(Guid idDrink, CancellationToken cancellationToken)
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody]Guid idDrink, CancellationToken cancellationToken)
         {
             await _drinksRepository.DeleteAsync(idDrink, cancellationToken);
+            return RedirectToAction("GetAll");
         }
 
         [HttpPost]
