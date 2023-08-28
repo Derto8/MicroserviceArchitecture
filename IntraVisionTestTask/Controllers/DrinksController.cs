@@ -83,12 +83,6 @@ namespace IntraVisionTestTask.Controllers
             return RedirectToAction("GetAll");
         }
 
-        [HttpPost]
-        public async Task<JsonResult> Get([FromBody]Guid idDrink, CancellationToken cancellationToken)
-        {
-            return Json(await _drinksRepository.GetAsync(idDrink, cancellationToken));
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {

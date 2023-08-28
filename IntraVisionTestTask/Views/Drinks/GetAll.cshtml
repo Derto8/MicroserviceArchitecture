@@ -5,7 +5,7 @@
         Users? user = HttpContextAccessor.HttpContext.Session.Get<Users>("user");
         if(user != null && user.Role == RoleEnum.Admin)
         {
-            <p><a class="btn btn-success w-100" name="button" asp-controller="Drinks" asp-action="Add">Добавить</a></p>
+            <p><a class="btn btn-success w-100" asp-controller="Drinks" asp-action="Add">Добавить</a></p>
         }
 
         <div class="container">
@@ -18,16 +18,18 @@
                             int coinDenomination = (int)coin.Denomination;
                             if (coin.IsBlocked == true)
                             {
-                                <p><a class="btn btn-danger disabled w-100" name="button">Номинал: @coinDenomination. Количество: @coin.Amount</a></p>
+                                <p><a class="btn btn-danger disabled w-100">Номинал: @coinDenomination. Количество: @coin.Amount</a></p>
                             }
                             else
                             {
-                                <p><a class="btn btn-warning w-100" name="button">Номинал: @coinDenomination. Количество: @coin.Amount</a></p>
+                                <p><a name="depositAmount" id="@coinDenomination" class="btn btn-warning w-100">Номинал: @coinDenomination. Количество: @coin.Amount</a></p>
                             }
                         }
                         </div>
                     }
                 }
+                <a>Текущий баланс:</a>
+                <a name="depositAmountText">0</a>
             </div>
         </div>
 
@@ -45,12 +47,20 @@
                         {
                             if (user.Role == RoleEnum.User)
                             {
-                                <p name="addToCart"><a class="btn btn-outline-warning w-100" name="button" id="@drink.Id">Купить</a></p>
+                                if(drink.Amount > 0)
+                                {
+                                    <p><a class="btn btn-outline-warning w-100" id="@drink.Id">Купить</a></p>
+                                }
+                                else
+                                {
+                                    <p><a class="btn btn-warning w-100 disabled">Напиток закончился</a></p>
+                                }
+
                             }
                             if (user.Role == RoleEnum.Admin)
                             {
                                 <div class="m-3" name="adminFunctions">
-                                    <p><a class="btn btn-warning w-100" name="button" asp-controller="Drinks" asp-action="Update" asp-route-idDrink="@drink.Id">Изменить</a></p>
+                                    <p><a class="btn btn-warning w-100" asp-controller="Drinks" asp-action="Update" asp-route-idDrink="@drink.Id">Изменить</a></p>
                                     <p name="buttonDel" id="@drink.Id"><a class="btn btn-danger w-100">Удалить</a></p>
                                 </div>
                             }
@@ -68,6 +78,29 @@
 
 @section Scripts{
     <script>
+
+        $('a[name="depositAmount"]').click(function () {
+
+            let $text = $('a[name="depositAmountText"]').text();
+            let sum = Number($(this).attr('id'));
+            let count = Number($text) + sum;
+
+
+            $('a[name="depositAmountText"]').text(count);
+
+            //var sum = $(this).attr('id');
+            
+            //counter += sum;
+
+            //$('a[name="depositAmountText"]').val(counter);
+        });
+
+
+
+
+
+        //мои жалкие попытки реализовать запросы к методас с атрибутом Authorize
+
         //$('div[name="main"]').children('div[name="adminFunctions"]').click(function () {
 
         //    $.ajax({
@@ -82,6 +115,7 @@
         //    })
         //})
 
+        //запрос на удаление
         $('div[name="main"]').children('div[name="adminFunctions"]').children('p[name="buttonDel"]').click(function () {
 
             $.ajax({
@@ -90,7 +124,7 @@
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify($(this).attr('id')),
                 dataType: "json",
-                })
+            })
         })
     </script>
 }
