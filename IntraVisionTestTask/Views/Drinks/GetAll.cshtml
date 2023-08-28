@@ -7,6 +7,30 @@
         {
             <p><a class="btn btn-success w-100" name="button" asp-controller="" asp-action="">Добавить</a></p>
         }
+
+        <div class="container">
+            <div class="row">
+                @{
+                    foreach (var coin in Model.Coins)
+                    {
+                        <div class="col">
+                        @{
+                            int coinDenomination = (int)coin.Denomination;
+                            if (coin.IsBlocked == true)
+                            {
+                                <p><a class="btn btn-danger disabled w-100" name="button">Номинал: @coinDenomination. Количество: @coin.Amount</a></p>
+                            }
+                            else
+                            {
+                                <p><a class="btn btn-warning w-100" name="button">Номинал: @coinDenomination. Количество: @coin.Amount</a></p>
+                            }
+                        }
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
         foreach (var drink in Model.Drinks)
         {
             <div class="col-lg-5 m-4 shadow mb-5">
@@ -25,11 +49,11 @@
                             }
                             if (user.Role == RoleEnum.Admin)
                             {
-                                <div class="m-3" name="needHide" id="@drink.Id">
-                                    <a class="btn btn-outline-success mb-5 mt-4 w-100">Редактирование</a>
-                                </div>
+                                //<div class="m-3" name="needHide" id="@drink.Id">
+                                //    <a class="btn btn-outline-success mb-5 mt-4 w-100">Редактирование</a>
+                                //</div>
                                 <div class="needHideFirst m-3" name="needShow">
-                                    <p><a class="btn btn-warning w-100" name="button" asp-controller="" asp-action="">Изменить</a></p>
+                                    <p><a class="btn btn-warning w-100" name="button" asp-controller="Drinks" asp-action="Update" asp-route-idDrink="@drink.Id">Изменить</a></p>
                                     <p><a class="btn btn-danger w-100" name="button" asp-controller="" asp-action="">Удалить</a></p>
                                 </div>
                             }
@@ -46,12 +70,12 @@
 </div>
 
 @section Scripts{
-    <script>
+@*    <script>
 
         $('div[name="needShow"]').hide();
 
         $('div[name="main"]').children('div[name="needHide"]').click(function () {
-
+            
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("Get", "Drinks")',
@@ -79,5 +103,5 @@
                 });
             }
         })
-    </script>
+    </script>*@
 }

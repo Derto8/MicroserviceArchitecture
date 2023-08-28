@@ -1,0 +1,28 @@
+﻿<form class="p-4 shadow" method="post" enctype="multipart/form-data">
+    <h1 class="display-4">Обновление монеты</h1>
+
+    <div class="form-group mb-2">
+        <label>Пароль</label>
+        <input class="form-control mb-3" name="amount" placeholder="Введите количество монет">
+    </div>
+
+    <div>
+        <label>Выберите номинал монеты</label>
+        <select class="m-2" name="denomination">
+            <option class="dropdown-item" value="1">1</option>
+            <option class="dropdown-item" value="2">2</option>
+            <option class="dropdown-item" value="5">5</option>
+            <option class="dropdown-item" value="10">10</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Заблокировать монету?</label>
+        <select class="m-2" name="isBlocked">
+            <option class="dropdown-item" value="true">Да</option>
+            <option class="dropdown-item" value="false">Нет</option>
+        </select>
+    </div>
+
+    <input type="submit" class="btn btn-outline-success w-100" />
+</form>
