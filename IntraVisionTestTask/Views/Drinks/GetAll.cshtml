@@ -29,7 +29,7 @@
                     }
                 }
                 <a>Текущий баланс:</a>
-                <a name="depositAmountText">0</a>
+                <a name="depositAmountText"></a>
             </div>
         </div>
 
@@ -79,20 +79,22 @@
 @section Scripts{
     <script>
 
+        $('a[name="depositAmountText"]').text(getBalance())
+
+        function getBalance(){
+            let balance = sessionStorage.getItem("balance");
+            return balance;
+        }
+
         $('a[name="depositAmount"]').click(function () {
 
-            let $text = $('a[name="depositAmountText"]').text();
+            let balance = getBalance();
             let sum = Number($(this).attr('id'));
-            let count = Number($text) + sum;
+            let count = Number(balance) + sum;
 
+            sessionStorage.setItem("balance", count);
 
-            $('a[name="depositAmountText"]').text(count);
-
-            //var sum = $(this).attr('id');
-            
-            //counter += sum;
-
-            //$('a[name="depositAmountText"]').val(counter);
+            $('a[name="depositAmountText"]').text(getBalance());
         });
 
 
