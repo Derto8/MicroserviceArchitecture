@@ -37,7 +37,7 @@ namespace IntraVisionTestTask.Controllers
 
         //[Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPost]
-        public async Task<IActionResult> Add(string name, decimal price,
+        public async Task<IActionResult> Add(string name, int price,
             int amount, string img, CancellationToken cancellationToken)
         {
             var drink = new Drinks
@@ -61,7 +61,7 @@ namespace IntraVisionTestTask.Controllers
 
         [HttpPost]
         //[Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
-        public async Task<IActionResult> Update(Guid idDrink, string name, decimal price, 
+        public async Task<IActionResult> Update(Guid idDrink, string name, int price, 
             int amount, string img, CancellationToken cancellationToken)
         {
             await _drinksRepository.UpdateAsync(idDrink, new Drinks

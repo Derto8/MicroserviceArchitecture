@@ -77,6 +77,7 @@ namespace IntraVisionTestTask
 
             builder.Services.AddTransient<ICoinsRepository, CoinsRepository>();
             builder.Services.AddTransient<IDrinksRepository, DrinksRepository>();
+            builder.Services.AddTransient<IBuyDrinkRepository, BuyDrinkRepository>();
             
             builder.Services.AddSingleton<IPublicKeyProvider, PublicKeyProvider>();
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

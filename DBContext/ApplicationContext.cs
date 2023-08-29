@@ -53,7 +53,7 @@ namespace DBContext
                         Id = Guid.NewGuid(),
                         Denomination = Enums.CoinDenominationsEnum.two,
                         Amount = 20,
-                        IsBlocked = true,
+                        IsBlocked = false,
                     },
 
                     new Coins()
@@ -81,18 +81,9 @@ namespace DBContext
                     {
                         Id = Guid.NewGuid(),
                         Name = "cola",
-                        Price = 30.99m,
+                        Price = 30,
                         Amount = 20,
-                        Img = ""
-                    },
-
-                    new Drinks()
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "sprite",
-                        Price = 50,
-                        Amount = 10,
-                        Img = ""
+                        Img = "/images/cola.jpg"
                     },
 
                     new Drinks()
@@ -101,7 +92,7 @@ namespace DBContext
                         Name = "dr. pepper",
                         Price = 80,
                         Amount = 30,
-                        Img = ""
+                        Img = "/images/drpepper.jpg"
                     }
                 }
             );

@@ -18,11 +18,11 @@
                             int coinDenomination = (int)coin.Denomination;
                             if (coin.IsBlocked == true)
                             {
-                                <p><a class="btn btn-danger disabled w-100">Номинал: @coinDenomination. Количество: @coin.Amount</a></p>
+                                <p><a class="btn btn-danger disabled w-100">Монета: @coinDenomination. Количество: @coin.Amount</a></p>
                             }
                             else
                             {
-                                <p><a name="depositAmount" id="@coinDenomination" class="btn btn-warning w-100">Номинал: @coinDenomination. Количество: @coin.Amount</a></p>
+                                <p><a name="depositAmount" id="@coinDenomination" class="btn btn-warning w-100">Монета: @coinDenomination. Количество: @coin.Amount</a></p>
                             }
                         }
                         </div>
@@ -49,7 +49,7 @@
                             {
                                 if(drink.Amount > 0)
                                 {
-                                    <p><a class="btn btn-outline-warning w-100" id="@drink.Id">Купить</a></p>
+                                    <p name="pBuyDrink"><a name="buyDrink" class="btn btn-outline-warning w-100" data="@drink.Price" id="@drink.Id">Купить</a></p>
                                 }
                                 else
                                 {
@@ -81,25 +81,75 @@
 
         $('a[name="depositAmountText"]').text(getBalance())
 
+        //функции присвоения баланса в хранилище сессии
         function getBalance(){
             let balance = sessionStorage.getItem("balance");
-            return balance;
+            return Number(balance);
         }
 
+        //функция добавление монет к балансу и количеству монет
         $('a[name="depositAmount"]').click(function () {
 
             let balance = getBalance();
             let sum = Number($(this).attr('id'));
-            let count = Number(balance) + sum;
+            let newBalance = balance + sum;
 
-            sessionStorage.setItem("balance", count);
+            sessionStorage.setItem("balance", newBalance);
 
             $('a[name="depositAmountText"]').text(getBalance());
         });
 
+        //функция добавление данных юзера в json файл для отправки на сервер
+        function getUserBuyDrinkJson(id) {
+            let UserBuyDrink = {
+                IdDrink: id,
+                Balance: getBalance(),
+            }
+            return UserBuyDrink;
+        }
 
+        $('p[name="pBuyDrink"]').click(function (){
+            let price = $(this).children('a[name="buyDrink"]').attr('data');
+            let balance = getBalance();
+            if(price > balance){
+                alert("Не достаточно монет!");
+            }
+            else{
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("BuyDrinkMethod", "BuyDrink")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(getUserBuyDrinkJson($(this).children('a[name="buyDrink"]').attr('id'))),
+                    dataType: "json",
+                    success: BuyProductSuccess(price),
+                })
+            }
+        })
 
+        //функция изменения баланса после покупки
+        function BuyProductSuccess(price){
+            balance = getBalance();
+            newBalance = balance - price;
+            sessionStorage.setItem("balance", newBalance);
+            setTimeout(reloadPage, 1000);
+        }
 
+        //обновление страницы
+        function reloadPage(){
+            location.reload();
+        }
+
+        //запрос на удаление напитка
+        $('div[name="main"]').children('div[name="adminFunctions"]').children('p[name="buttonDel"]').click(function () {
+
+            $.ajax({
+                type: "DELETE",
+                url: '@Url.Action("Delete", "Drinks")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify($(this).attr('id')),
+                dataType: "json",
+            })
+        })
 
         //мои жалкие попытки реализовать запросы к методас с атрибутом Authorize
 
@@ -116,17 +166,5 @@
         //        }
         //    })
         //})
-
-        //запрос на удаление
-        $('div[name="main"]').children('div[name="adminFunctions"]').children('p[name="buttonDel"]').click(function () {
-
-            $.ajax({
-                type: "DELETE",
-                url: '@Url.Action("Delete", "Drinks")',
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify($(this).attr('id')),
-                dataType: "json",
-            })
-        })
     </script>
 }
