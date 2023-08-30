@@ -13,21 +13,25 @@ namespace IntraVisionTestTask.Controllers
     {
         private ILogger<BuyDrinkController> _logger;
         private IBuyDrinkRepository _buyDrinkRepository;
+        private IConfiguration _configuration;
         public BuyDrinkController(
             ILogger<BuyDrinkController> logger,
             ILogger<BuyDrinkRepository> loggerRepo,
-            ApplicationContext context
+            ApplicationContext context,
+            IConfiguration conf
             )
         {
             _logger = logger;
             _buyDrinkRepository = new BuyDrinkRepository(context, loggerRepo);
+            _configuration = conf;
         }
 
         [HttpPost]
-     //   [Authorize(Roles = $"{nameof(RoleEnum.User)}")]
-        public async Task BuyDrinkMethod([FromBody]UserBuyDrink userCoins, CancellationToken cancellationToken)
+        [Authorize(Roles = $"{nameof(RoleEnum.User)}")]
+        public async Task<JsonResult> BuyDrinkMethod([FromBody]UserBuyDrink userCoins, CancellationToken cancellationToken)
         {
             await _buyDrinkRepository.BuyDrinkAsync(userCoins, cancellationToken);
+            return Json(_configuration["MainServerAddress"]);
         }
     }
 }

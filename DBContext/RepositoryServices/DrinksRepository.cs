@@ -27,16 +27,9 @@ namespace DBContext.RepositoryServices
             await SaveAsync(cancellationToken);
         }
 
-        public async Task UpdateAsync(Guid idDrink, Drinks drink, CancellationToken cancellationToken)
+        public async Task UpdateAsync(Drinks drink, CancellationToken cancellationToken)
         {
-            Drinks drinkChange = await GetAsync(idDrink, cancellationToken);
-            _context.Entry(drinkChange).State = EntityState.Modified;
-
-            drinkChange.Name = drink.Name;
-            drinkChange.Price = drink.Price;
-            drinkChange.Amount = drink.Amount;
-            drinkChange.Img = drink.Img;
-
+            _context.Entry(drink).State = EntityState.Modified;
             await SaveAsync(cancellationToken);
         }
 

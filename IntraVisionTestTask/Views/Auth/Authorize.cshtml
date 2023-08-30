@@ -10,7 +10,7 @@
     <input class="form-control mb-3" name="Password" type="password" placeholder="Введите пароль">
 </div>
 
-<p name="authorizeUserP"><a class="btn btn-outline-warning w-100">Авторизироваться</a></p>
+<p name="authorizeUserP"><a class="btn btn-success w-100">Авторизироваться</a></p>
 
 <p class="text-danger">@ViewBag.Error</p>
 
@@ -33,13 +33,10 @@
             if (data === undefined){
                 alert("Такого пользователя не существует!");
             }
-            if(data === null)
-            {
-                alert("null");
-            }
             else{
-                sessionStorage.setItem("token", data)
-                alert("Вы авторизированы, перейдите на страницу напитков");
+                console.log(data);
+                sessionStorage.setItem("token", data.jwt);
+                window.location = data.addres;
             }
      
         }

@@ -25,6 +25,7 @@ namespace DBContext.RepositoryServices
         public async Task<IEnumerable<Coins>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.CoinsTable.ToListAsync(cancellationToken);
+        
         }
 
         public async Task SaveAsync(CancellationToken cancellationToken)
@@ -32,30 +33,19 @@ namespace DBContext.RepositoryServices
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task ChangeAmountCoinAsync(Guid coinId, int amount, CancellationToken cancellationToken)
-        {
-            if(amount >= 0)
-            {
-                Coins coinChange = await GetAsync(coinId, cancellationToken);
-                _context.Entry(coinChange).State = EntityState.Modified;
-
-                coinChange.Amount = amount;
-                await SaveAsync(cancellationToken);
-            }
-        }
-
-        public async Task ChangeBlockStatusCoinAsync(Guid coinId, bool state, CancellationToken cancellationToken)
-        {
-            Coins coinChange = await GetAsync(coinId, cancellationToken);
-            _context.Entry(coinChange).State = EntityState.Modified;
-
-            coinChange.IsBlocked = state;
-            await SaveAsync(cancellationToken);
-        }
-
         public async Task<Coins> GetAsync(Guid itemId, CancellationToken cancellationToken)
         {
-            return await _context.CoinsTable.Where(c => c.Equals(itemId)).FirstOrDefaultAsync(cancellationToken);
+            return await _context.CoinsTable.Where(c => c.Id.Equals(itemId)).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task ChangeCoin(Guid idCoin, int amount, bool isBlocked, CancellationToken cancellationToken)
+        {
+            Coins coin = await GetAsync(idCoin, cancellationToken);
+            _context.Entry(coin).State = EntityState.Modified;
+
+            coin.Amount = amount;
+            coin.IsBlocked = isBlocked;
+            await SaveAsync(cancellationToken);
         }
     }
 }

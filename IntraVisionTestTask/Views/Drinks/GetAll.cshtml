@@ -14,17 +14,34 @@
                     foreach (var coin in Model.Coins)
                     {
                         <div class="col">
-                        @{
-                            int coinDenomination = (int)coin.Denomination;
-                            if (coin.IsBlocked == true)
-                            {
-                                <p><a class="btn btn-danger disabled w-100">Монета: @coinDenomination. Количество: @coin.Amount</a></p>
+                            @{
+                                if(user != null)
+                                {
+                                    int coinDenomination = (int)coin.Denomination;
+                                    if (user.Role == RoleEnum.User)
+                                    {
+                                        if (coin.IsBlocked == true)
+                                        {
+                                            <p><a class="btn btn-danger disabled w-100">Монета: @coinDenomination. Количество: @coin.Amount</a></p>
+                                        }
+                                        else
+                                        {
+                                            <p><a name="depositAmount" id="@coinDenomination" class="btn btn-warning w-100">Монета: @coinDenomination. Количество: @coin.Amount</a></p>
+                                        }
+                                    }
+                                    if (user.Role == RoleEnum.Admin)
+                                    {
+                                        if (coin.IsBlocked == true)
+                                        {
+                                            <p><a class="btn btn-danger w-100" asp-controller="Coins" asp-action="Update" asp-route-idCoin="@coin.Id">Монета: @coinDenomination. Количество: @coin.Amount. Изменить</a></p>
+                                        }
+                                        else
+                                        {
+                                            <p><a class="btn btn-warning w-100" asp-controller="Coins" asp-action="Update" asp-route-idCoin="@coin.Id">Монета: @coinDenomination. Количество: @coin.Amount. Изменить</a></p>
+                                        }
+                                    }
+                                }
                             }
-                            else
-                            {
-                                <p><a name="depositAmount" id="@coinDenomination" class="btn btn-warning w-100">Монета: @coinDenomination. Количество: @coin.Amount</a></p>
-                            }
-                        }
                         </div>
                     }
                 }
@@ -36,6 +53,12 @@
         foreach (var drink in Model.Drinks)
         {
             <div class="col-lg-5 m-4 shadow mb-5">
+                <style type="text/css">
+                img{
+                    object-fit: cover;
+                }
+                </style>
+
                 <img class="img-fluid rounded mx-auto d-block" width="200" height="300" src="@drink.Img" alt="Картинка отсутствует" />
                 <div class="ml-4 pr-4 mt-2 text-dark" name="main">
                     <p>Название: @drink.Name</p>
@@ -110,6 +133,8 @@
 
         $('p[name="pBuyDrink"]').click(function (){
             let price = $(this).children('a[name="buyDrink"]').attr('data');
+            sessionStorage.setItem("price", price);
+
             let balance = getBalance();
             if(price > balance){
                 alert("Не достаточно монет!");
@@ -121,23 +146,29 @@
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(getUserBuyDrinkJson($(this).children('a[name="buyDrink"]').attr('id'))),
                     dataType: "json",
-                    success: BuyProductSuccess(price),
+                    success: BuyProductSuccess,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+                    }
                 })
             }
         })
 
         //функция изменения баланса после покупки и обновления страницы
-        function BuyProductSuccess(price){
+        function BuyProductSuccess(data){
+            let price = sessionStorage.getItem("price");
             balance = getBalance();
             newBalance = balance - price;
             sessionStorage.setItem("balance", newBalance);
-            setTimeout(reloadPage, 1000);
+            sessionStorage.removeItem("price");
+            window.location = data;
+         //   setTimeout(reloadPage, 1000);
         }
 
         //обновление страницы
-        function reloadPage(){
-            location.reload();
-        }
+        //function reloadPage(){
+        //    location.reload();
+        //}
 
         //запрос на удаление напитка
         $('div[name="main"]').children('div[name="adminFunctions"]').children('p[name="buttonDel"]').click(function () {
@@ -150,24 +181,8 @@
                 dataType: "json",
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
-                }
+                },
             })
         })
-
-        //мои жалкие попытки реализовать запросы к методас с атрибутом Authorize
-
-        //$('div[name="main"]').children('div[name="adminFunctions"]').click(function () {
-
-        //    $.ajax({
-        //        type: "GET",
-        //        url: '@Url.Action("Update", "Drinks")',
-        //        contentType: "application/json; charset=utf-8",
-        //        data: JSON.stringify($(this).attr('id')),
-        //        dataType: "json",
-        //        beforeSend: function (xhr) {
-        //            xhr.setRequestHeader("Authorization", 'Bearer ');
-        //        }
-        //    })
-        //})
     </script>
 }

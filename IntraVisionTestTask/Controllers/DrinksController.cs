@@ -17,16 +17,19 @@ namespace IntraVisionTestTask.Controllers
         private ILogger<DrinksController> _logger { get; set; }
         private IDrinksRepository _drinksRepository { get; set; }
         private ICoinsRepository _coinsRepository { get; set; }
+        private IConfiguration _configuration { get; set; }
 
         public DrinksController(
             ILogger<DrinksController> logger,
             ILogger<DrinksRepository> loggerRepo,
             ILogger<CoinsRepository> coinRepository,
-            ApplicationContext context)
+            ApplicationContext context,
+            IConfiguration conf)
         {
             _logger = logger;
             _drinksRepository = new DrinksRepository(context, loggerRepo);
             _coinsRepository = new CoinsRepository(context, coinRepository);
+            _configuration = conf;
         }
 
         [HttpGet]
@@ -35,44 +38,27 @@ namespace IntraVisionTestTask.Controllers
             return View();
         }
 
-        //[Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
+        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPost]
-        public async Task<IActionResult> Add(string name, int price,
-            int amount, string img, CancellationToken cancellationToken)
+        public async Task<JsonResult> AddAdmin([FromBody]Drinks drink, CancellationToken cancellationToken)
         {
-            var drink = new Drinks
-            {
-                Name = name,
-                Price = price,
-                Amount = amount,
-                Img = img,
-            };
-
             await _drinksRepository.AddAsync(drink, cancellationToken);
-            return RedirectToAction("GetAll");
+            return Json(_configuration["MainServerAddress"]);
         }
 
         [HttpGet]
-        //[Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         public async Task<IActionResult> Update(Guid idDrink, CancellationToken cancellationToken)
         {
             return View(await _drinksRepository.GetAsync(idDrink, cancellationToken));
         }
 
-        [HttpPost]
-        //[Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
-        public async Task<IActionResult> Update(Guid idDrink, string name, int price, 
-            int amount, string img, CancellationToken cancellationToken)
+        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
+        [HttpPut]
+        public async Task<JsonResult> UpdateAdmin([FromBody]Drinks drink, CancellationToken cancellationToken)
         {
-            await _drinksRepository.UpdateAsync(idDrink, new Drinks
-            {
-                Name = name,
-                Price = price,
-                Amount = amount,
-                Img = img,
-            }, cancellationToken);
+            await _drinksRepository.UpdateAsync(drink, cancellationToken);
 
-            return RedirectToAction("GetAll");
+            return Json(_configuration["MainServerAddress"]);
         }
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]

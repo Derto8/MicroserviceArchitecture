@@ -1,0 +1,48 @@
+﻿@model Coins
+
+<h1 class="display-4">Обновление монеты</h1>
+
+<div class="d-none">
+    <input class="form-control" name="idCoin" value="@Model.Id">
+</div>
+
+<div class="form-group mb-2">
+    <label>Количество монет</label>
+    <input class="form-control mb-3" value="@Model.Amount" name="amount" placeholder="Введите количество монет">
+</div>
+
+<div>
+    <label>Заблокировать монету?</label>
+    <select class="m-2" name="isBlocked">
+        <option class="dropdown-item" value="true">Да</option>
+        <option class="dropdown-item" value="false">Нет</option>
+    </select>
+</div>
+
+<p name="changeMethod"><a class="btn btn-success w-100">Обновить</a></p>
+
+@section Scripts{
+    <script>
+        function RedirectPage(data) {
+            window.location = data;
+        }
+
+        $('p[name="changeMethod"]').click(function () {
+            let Id = $('input[name="idCoin"]').val().toString();
+            let amount = $('input[name="amount"]').val().toString();
+            let isBlocked = $('select[name="isBlocked"]').val().toString();
+
+            $.ajax({
+                type: "PUT",
+                url: '@Url.Action("UpdateAdmin", "Coins")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({ Id, amount, isBlocked }),
+                dataType: "json",
+                success: RedirectPage,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+                }
+            })
+        })
+    </script>
+}

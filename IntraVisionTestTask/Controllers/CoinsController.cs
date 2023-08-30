@@ -3,51 +3,41 @@ using DBContext.Enums;
 using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
+using IntraVisionTestTask.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace IntraVisionTestTask.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class CoinsController : ControllerBase
+    public class CoinsController : Controller
     {
         private readonly ILogger<CoinsController> _logger;
         private readonly ICoinsRepository _coinsRepository;
-
+        private IConfiguration _configuration;
         public CoinsController(
             ILogger<CoinsController> logger,
             ILogger<CoinsRepository> loggerRepo,
-            ApplicationContext context)
+            ApplicationContext context,
+            IConfiguration conf)
         {
             _logger = logger;
             _coinsRepository = new CoinsRepository(context, loggerRepo);
+            _configuration = conf;
         }
 
-        public async Task<IEnumerable<Coins>> GetAllCoins(CancellationToken cancellationToken)
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid idCoin, CancellationToken cancellationToken)
         {
-            return await _coinsRepository.GetAllAsync(cancellationToken);
-        }
-
-        [HttpPost(template: "GetCoin")]
-        public async Task<Coins> GetCoin(Guid coinId, CancellationToken cancellationToken)
-        {
-            return await _coinsRepository.GetAsync(coinId, cancellationToken);
+            return View(await _coinsRepository.GetAsync(idCoin, cancellationToken));
         }
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
-        [HttpPut(template: "ChangeAmountCoin")]
-        public async Task ChangeAmountCoin(Guid coinId, int amount, CancellationToken cancellationToken)
+        [HttpPut]
+        public async Task<JsonResult> UpdateAdmin([FromBody]CoinsFromClient coins, CancellationToken cancellationToken)
         {
-            await _coinsRepository.ChangeAmountCoinAsync(coinId, amount, cancellationToken);
-        }
-
-        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
-        [HttpPut(template: "ChangeBlockStatusCoin")]
-        public async Task ChangeBlockStatusCoin(Guid coinId, bool state, CancellationToken cancellationToken)
-        {
-            await _coinsRepository.ChangeBlockStatusCoinAsync(coinId, state, cancellationToken);
+            await _coinsRepository.ChangeCoin(coins.Id, coins.Amount, coins.IsBlocked, cancellationToken);
+            return Json(_configuration["MainServerAddress"]);
         }
     }
 }

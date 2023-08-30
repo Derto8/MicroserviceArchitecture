@@ -22,16 +22,19 @@ namespace IntraVisionTestTask.Controllers
         private ILogger<AuthController> _logger;
         private AuthorizationMicroserviceOptions _microserviceOpt;
         private IUserRepository _userRepository;
+        private IConfiguration _configuration;
 
         public AuthController(
             ILogger<AuthController> logger,
             IOptions<AuthorizationMicroserviceOptions> microserviceOpt,
             ApplicationContext context,
-            ILogger<UserRepository> loggerRepo)
+            ILogger<UserRepository> loggerRepo,
+            IConfiguration conf)
         {
             _logger = logger;
             _microserviceOpt = microserviceOpt.Value;
             _userRepository = new UserRepository(context, loggerRepo);
+            _configuration = conf;
         }
 
         public IActionResult Authorize()
@@ -40,16 +43,21 @@ namespace IntraVisionTestTask.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> AuthUser([FromBody]AuthUser authUser, CancellationToken token)
+        public async Task<JsonResult> AuthUser([FromBody]AuthUser authUser, CancellationToken cancellationToken)
         {
             JWT jwt = await PostRequests.Authorize(authUser.Login, authUser.Password, _microserviceOpt);
-            Users user = await _userRepository.GetAsync(jwt.userId, token);
+            Users user = await _userRepository.GetAsync(jwt.userId, cancellationToken);
             if (jwt != null && user != null)
             {
-                HttpContext.Session.SetString("token", jwt.access_token);
-                HttpContext.Session.Set<Users>("user", user);
+                HttpContext.Session.Set("token", jwt.access_token);
+                HttpContext.Session.Set("user", user);
 
-                return Json(jwt.access_token);
+                var json = new JWTAndAddres
+                {
+                    jwt = jwt.access_token,
+                    addres = _configuration["MainServerAddress"]
+                };
+                return Json(json);
             }
             else return null;
         }
