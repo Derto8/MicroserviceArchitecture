@@ -75,7 +75,7 @@ namespace IntraVisionTestTask.Controllers
             return RedirectToAction("GetAll");
         }
 
-        //[Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
+        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody]Guid idDrink, CancellationToken cancellationToken)
         {

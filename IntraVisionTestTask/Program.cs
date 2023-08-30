@@ -9,7 +9,7 @@ using DBContext;
 using DBContext.Interfaces;
 using DBContext.RepositoryServices;
 using GlobalExceptionHandling.Middlewares;
-using IntraVisionTestTask.DTOs;
+using IntraVisionTestTask.ConfOptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;

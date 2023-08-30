@@ -1,4 +1,5 @@
-﻿using IntraVisionTestTask.DTOs;
+﻿using IntraVisionTestTask.ConfOptions;
+using IntraVisionTestTask.DTOs;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;

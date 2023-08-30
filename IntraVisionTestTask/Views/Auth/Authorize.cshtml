@@ -1,19 +1,47 @@
-﻿@model JWT
+﻿<h1 class="display-4">Авторизация</h1>
 
-<form class="p-4 shadow" method="post" enctype="multipart/form-data">
-    <h1 class="display-4">Авторизация</h1>
+<div class="form-group mb-2">
+    <label>Логин</label>
+    <input class="form-control" name="Login" placeholder="Введите логин">
+</div>
 
-    <div class="form-group mb-2">
-        <label>Логин</label>
-        <input class="form-control" name="Login" placeholder="Введите логин">
-    </div>
+<div class="form-group mb-2">
+    <label>Пароль</label>
+    <input class="form-control mb-3" name="Password" type="password" placeholder="Введите пароль">
+</div>
 
-    <div class="form-group mb-2">
-        <label>Пароль</label>
-        <input class="form-control mb-3" name="Password" type="password" placeholder="Введите пароль">
-    </div>
+<p name="authorizeUserP"><a class="btn btn-outline-warning w-100">Авторизироваться</a></p>
 
-    <input type="submit" class="btn btn-outline-success w-100"/>
+<p class="text-danger">@ViewBag.Error</p>
 
-    <p class="text-danger">@ViewBag.Error</p>
-</form>
+@section Scripts{
+    <script>
+        $('p[name="authorizeUserP"]').click(function () {
+            let login = $('input[name="Login"]').val().toString();
+            let password = $('input[name="Password"]').val().toString();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AuthUser", "Auth")',
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({login, password}),
+                dataType: "json",
+                success: AuthFunction,
+            })
+        })
+
+        function AuthFunction(data){
+            if (data === undefined){
+                alert("Такого пользователя не существует!");
+            }
+            if(data === null)
+            {
+                alert("null");
+            }
+            else{
+                sessionStorage.setItem("token", data)
+                alert("Вы авторизированы, перейдите на страницу напитков");
+            }
+     
+        }
+    </script>
+}

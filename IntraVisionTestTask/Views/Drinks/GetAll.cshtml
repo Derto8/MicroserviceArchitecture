@@ -126,7 +126,7 @@
             }
         })
 
-        //функция изменения баланса после покупки
+        //функция изменения баланса после покупки и обновления страницы
         function BuyProductSuccess(price){
             balance = getBalance();
             newBalance = balance - price;
@@ -148,6 +148,9 @@
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify($(this).attr('id')),
                 dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("token"));
+                }
             })
         })
 

@@ -3,6 +3,7 @@ using DBContext;
 using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
+using IntraVisionTestTask.ConfOptions;
 using IntraVisionTestTask.DTOs;
 using IntraVisionTestTask.Extensions;
 using IntraVisionTestTask.Requests;
@@ -39,26 +40,18 @@ namespace IntraVisionTestTask.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Authorize(string Login, string Password, CancellationToken token)
+        public async Task<JsonResult> AuthUser([FromBody]AuthUser authUser, CancellationToken token)
         {
-            if (ModelState.IsValid)
+            JWT jwt = await PostRequests.Authorize(authUser.Login, authUser.Password, _microserviceOpt);
+            Users user = await _userRepository.GetAsync(jwt.userId, token);
+            if (jwt != null && user != null)
             {
-                JWT jwt = await PostRequests.Authorize(Login, Password, _microserviceOpt);
-                Users user = await _userRepository.GetAsync(jwt.userId, token);
-                if (jwt != null && user != null)
-                {
-                    HttpContext.Session.SetString("token", jwt.access_token);
-                    HttpContext.Session.Set<Users>("user", user);
+                HttpContext.Session.SetString("token", jwt.access_token);
+                HttpContext.Session.Set<Users>("user", user);
 
-                    return RedirectToAction("GetAll", "Drinks", token);
-                }
-                else
-                {
-                    ViewBag.Error = "Такого пользователя не существует!";
-                    return View(token);
-                }
+                return Json(jwt.access_token);
             }
-            return View(Login, Password);
+            else return null;
         }
 
         public IActionResult Registration()

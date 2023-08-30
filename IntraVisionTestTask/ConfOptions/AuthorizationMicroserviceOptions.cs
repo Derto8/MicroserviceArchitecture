@@ -1,4 +1,4 @@
-﻿namespace IntraVisionTestTask.DTOs
+﻿namespace IntraVisionTestTask.ConfOptions
 {
     public class AuthorizationMicroserviceOptions
     {
