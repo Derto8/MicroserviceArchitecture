@@ -178,5 +178,19 @@
                 },
             })
         })
+
+        //выход из аккаунта
+        $('a[name="aLogOutUser"]').click(function () {
+
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("price");
+            sessionStorage.removeItem("balance");
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("LogOut", "Auth")',
+            })
+            window.location.reload();
+        });
     </script>
 }

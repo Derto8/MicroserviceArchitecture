@@ -83,5 +83,12 @@ namespace IntraVisionTestTask.Controllers
             }
             return View(token);
         }
+
+        [HttpGet]
+        public void LogOut()
+        {
+            HttpContext.Session.Remove("token");
+            HttpContext.Session.Remove("user");
+        }
     }
 }
