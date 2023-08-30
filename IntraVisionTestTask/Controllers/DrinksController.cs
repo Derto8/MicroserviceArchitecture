@@ -4,11 +4,9 @@ using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
 using IntraVisionTestTask.DTOs;
-using IntraVisionTestTask.Extensions;
+using IntraVisionTestTask.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using System.Data;
 
 namespace IntraVisionTestTask.Controllers
 {
@@ -18,18 +16,21 @@ namespace IntraVisionTestTask.Controllers
         private IDrinksRepository _drinksRepository { get; set; }
         private ICoinsRepository _coinsRepository { get; set; }
         private IConfiguration _configuration { get; set; }
+        private IWebHostEnvironment _webHostEnvironment { get; set; }
 
         public DrinksController(
             ILogger<DrinksController> logger,
             ILogger<DrinksRepository> loggerRepo,
             ILogger<CoinsRepository> coinRepository,
             ApplicationContext context,
-            IConfiguration conf)
+            IConfiguration conf,
+            IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
             _drinksRepository = new DrinksRepository(context, loggerRepo);
             _coinsRepository = new CoinsRepository(context, coinRepository);
             _configuration = conf;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -40,8 +41,17 @@ namespace IntraVisionTestTask.Controllers
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPost]
-        public async Task<JsonResult> AddAdmin([FromBody]Drinks drink, CancellationToken cancellationToken)
+        public async Task<JsonResult> AddAdmin(DrinkFromClient drinkFromClient, CancellationToken cancellationToken)
         {
+            Drinks drink = new Drinks
+            {
+                Id = drinkFromClient.Id,
+                Name = drinkFromClient.Name,
+                Amount = drinkFromClient.Amount,
+                Price = drinkFromClient.Price,
+                Img = ImageUploadService.SaveImage(drinkFromClient.Img,
+                _webHostEnvironment)
+            };
             await _drinksRepository.AddAsync(drink, cancellationToken);
             return Json(_configuration["MainServerAddress"]);
         }
@@ -54,8 +64,18 @@ namespace IntraVisionTestTask.Controllers
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut]
-        public async Task<JsonResult> UpdateAdmin([FromBody]Drinks drink, CancellationToken cancellationToken)
+        public async Task<JsonResult> UpdateAdmin(DrinkFromClient drinkFromClient, CancellationToken cancellationToken)
         {
+            Drinks drink = new Drinks
+            {
+                Id = drinkFromClient.Id,
+                Name = drinkFromClient.Name,
+                Amount = drinkFromClient.Amount,
+                Price = drinkFromClient.Price,
+                Img = ImageUploadService.SaveImage(drinkFromClient.Img,
+                _webHostEnvironment)
+            };
+
             await _drinksRepository.UpdateAsync(drink, cancellationToken);
 
             return Json(_configuration["MainServerAddress"]);
