@@ -106,7 +106,7 @@ namespace IntraVisionTestTask
                 pattern: "{controller=Drinks}/{action=GetAll}/{id?}");
 
 
-            // мидлварь обработки исключений
+            // мидлварь глобальной обработки исключений
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.MapControllers();

@@ -37,11 +37,23 @@ namespace IntraVisionTestTask.Controllers
             _configuration = conf;
         }
 
+        /// <summary>
+        /// Показывает страницу с формой авторизации юзера
+        /// </summary>
+        /// <returns>Страница авторизации юзера</returns>
         public IActionResult Authorize()
         {
             return View();
         }
 
+        /// <summary>
+        /// Посылает POST-запрос к микросервису AuthMicroserice на авторизацию юзера,
+        /// в теле запроса находится модель данных необходимая для авторизации.
+        /// </summary>
+        /// <param name="authUser">Модель данных юзера необходимых для его авторизации на сервере</param>
+        /// <param name="cancellationToken">Токен отмены задачи</param>
+        /// <returns>При успешной авторизации, возвращает JWT-токен юзера
+        /// а так же путь к редиректу на главную страницу</returns>
         [HttpPost]
         public async Task<JsonResult> AuthUser([FromBody]AuthUser authUser, CancellationToken cancellationToken)
         {
@@ -62,11 +74,23 @@ namespace IntraVisionTestTask.Controllers
             else return Json($"{_configuration["MainServerAddress"]}/Auth/Authorize");
         }
 
+        /// <summary>
+        /// Показывает страницу с формой регистрации юзера
+        /// </summary>
+        /// <returns>Страница регистрации юзера</returns>
         public IActionResult Registration()
         {
             return View();
         }
 
+        /// <summary>
+        /// Посылает POST-запрос к микросервису AuthMicroserice на регистрацию юзера,
+        /// в теле запроса находится логин и пароль юзера, которые добавляются в бд.
+        /// </summary>
+        /// <param name="Login">Логин юзера</param>
+        /// <param name="Password">Пароль</param>
+        /// <param name="token">Токен отмены</param>
+        /// <returns>Редирект на страницу авторизации</returns>
         [HttpPost]
         public async Task<IActionResult> Registration(string Login, string Password, CancellationToken token)
         {
@@ -85,7 +109,7 @@ namespace IntraVisionTestTask.Controllers
         }
 
         /// <summary>
-        /// Выход из аккаунта
+        /// Выход юзера с аккаунт (обращение к методу с клиента)
         /// </summary>
         [HttpGet]
         public void LogOut()
