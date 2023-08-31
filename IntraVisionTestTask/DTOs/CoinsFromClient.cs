@@ -1,5 +1,8 @@
 ﻿namespace IntraVisionTestTask.DTOs
 {
+    /// <summary>
+    /// dto, для приему данных монеты с клиента
+    /// </summary>
     public class CoinsFromClient
     {
         public Guid Id { get; set; }

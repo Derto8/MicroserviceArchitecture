@@ -25,6 +25,7 @@
 @section Scripts{
     <script>
 
+        //генерация GUID
         function CreateGUID() {
             return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
                 .replace(/[xy]/g, function (c) {
@@ -34,10 +35,12 @@
                 });
         }
 
+        //переход на главную страницу
         function RedirectPage(data){
             window.location = data;
         }
 
+        //добавление напитка
         $('p[name="addMethod"]').click(function (){
             let Id = CreateGUID();
             let name = $('input[name="name"]').val().toString();

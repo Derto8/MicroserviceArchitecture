@@ -16,6 +16,8 @@
 
 @section Scripts{
     <script>
+
+        //авторизация - получение jwt
         $('p[name="authorizeUserP"]').click(function () {
             let login = $('input[name="Login"]').val().toString();
             let password = $('input[name="Password"]').val().toString();
@@ -29,9 +31,11 @@
             })
         })
 
+        //добавляем в sessionStorage jwt для дальнейших запросов с атрибутом Authorize
         function AuthFunction(data){
-            if (data === undefined){
+            if (data.jwt === undefined){
                 alert("Такого пользователя не существует!");
+                window.location = data;
             }
             else{
                 console.log(data);

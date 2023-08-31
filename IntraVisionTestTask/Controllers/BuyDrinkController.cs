@@ -26,6 +26,13 @@ namespace IntraVisionTestTask.Controllers
             _configuration = conf;
         }
 
+        /// <summary>
+        /// Метод покупки юзером напитка
+        /// </summary>
+        /// <param name="userCoins">Модель данных юзера необходимых для покупки
+        /// напитка, полученная с клиента</param>
+        /// <param name="cancellationToken">Токен отмены задачи</param>
+        /// <returns>Страница с формой обновления данных монеты</returns>
         [HttpPost]
         [Authorize(Roles = $"{nameof(RoleEnum.User)}")]
         public async Task<JsonResult> BuyDrinkMethod([FromBody]UserBuyDrink userCoins, CancellationToken cancellationToken)

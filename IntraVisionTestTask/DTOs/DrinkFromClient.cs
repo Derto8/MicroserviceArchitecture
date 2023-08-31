@@ -1,5 +1,8 @@
 ﻿namespace IntraVisionTestTask.DTOs
 {
+    /// <summary>
+    /// dto для приема данных напитка с клиента
+    /// </summary>
     public class DrinkFromClient
     {
         public Guid Id { get; set; }

@@ -107,7 +107,7 @@ namespace IntraVisionTestTask
 
 
             // мидлварь обработки исключений
-          //  app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.MapControllers();
 

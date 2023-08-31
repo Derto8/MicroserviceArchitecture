@@ -8,6 +8,13 @@ namespace IntraVisionTestTask.Requests
 {
     public static class PostRequests
     {
+        /// <summary>
+        /// пост запрос к микросервису авторизации к контроллеру Authorization, методу authuser для получения jwt
+        /// </summary>
+        /// <param name="login">логин юзера</param>
+        /// <param name="pass">пароль юзера</param>
+        /// <param name="opt">конфигурация для подключению к микросервису</param>
+        /// <returns>JsonWebToken</returns>
         public static async Task<JWT> Authorize(string login, string pass, AuthorizationMicroserviceOptions opt)
         {
             using (var client = new HttpClient())
@@ -25,6 +32,14 @@ namespace IntraVisionTestTask.Requests
             }
         }
 
+        /// <summary>
+        /// пост запрос к микросервису авторизации к контроллеру Authorization, методу registration
+        /// для добавления нового юзера (записи) в бд
+        /// </summary>
+        /// <param name="login">логин юзера</param>
+        /// <param name="pass">пароль юзера</param>
+        /// <param name="opt">конфигурация для подключению к микросервису</param>
+        /// <returns>результат добавления новой записи в бд</returns>
         public static async Task<bool> Registration(string login, string pass, AuthorizationMicroserviceOptions opt)
         {
             using (var client = new HttpClient())

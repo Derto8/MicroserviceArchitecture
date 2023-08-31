@@ -23,10 +23,12 @@
 
 @section Scripts{
     <script>
+        //переход на главную страницу
         function RedirectPage(data) {
             window.location = data;
         }
 
+        //изменение конкретной монеты
         $('p[name="changeMethod"]').click(function () {
             let Id = $('input[name="idCoin"]').val().toString();
             let amount = $('input[name="amount"]').val().toString();

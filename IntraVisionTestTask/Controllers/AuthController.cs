@@ -59,7 +59,7 @@ namespace IntraVisionTestTask.Controllers
                 };
                 return Json(json);
             }
-            else return null;
+            else return Json($"{_configuration["MainServerAddress"]}/Auth/Authorize");
         }
 
         public IActionResult Registration()
@@ -84,6 +84,9 @@ namespace IntraVisionTestTask.Controllers
             return View(token);
         }
 
+        /// <summary>
+        /// Выход из аккаунта
+        /// </summary>
         [HttpGet]
         public void LogOut()
         {

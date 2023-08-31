@@ -31,10 +31,12 @@
 @section Scripts{
     <script>
 
+        //переход на главную страницу
         function RedirectPage(data) {
             window.location = data;
         }
 
+        //обновление напитка
         $('p[name="changeMethod"]').click(function () {
             let Id = $('input[name="idDrink"]').val().toString();
             let name = $('input[name="name"]').val().toString();
