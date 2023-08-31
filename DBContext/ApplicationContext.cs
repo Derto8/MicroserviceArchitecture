@@ -93,6 +93,22 @@ namespace DBContext
                         Price = 80,
                         Amount = 30,
                         Img = "/images/drpepper.jpg"
+                    },
+                    new Drinks()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "sprite",
+                        Price = 50,
+                        Amount = 1,
+                        Img = "/images/sprite.jpg"
+                    },
+                    new Drinks()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "fanta",
+                        Price = 100,
+                        Amount = 2,
+                        Img = "/images/fanta.jpg"
                     }
                 }
             );
