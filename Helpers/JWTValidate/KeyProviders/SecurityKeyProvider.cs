@@ -1,18 +1,17 @@
-﻿using AuthMicroservice.Authorization.Utils.DTOs;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Helpers.JWTValidate.DTOs;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace AuthMicroservice.Authorization.Utils.KeyProviders
+namespace Helpers.JWTValidate.KeyProviders
 {
     public class SecurityKeyProvider
     {
-        public SymmetricSecurityKey GetSymmetricSecurityKey(string KEY) =>
-       new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
-
         private SecurityKey PrivateKey { get; }
         private PublicKeyDTO PublicKey { get; }
 
@@ -34,7 +33,5 @@ namespace AuthMicroservice.Authorization.Utils.KeyProviders
 
         public SecurityKey GetPrivateKey() => PrivateKey;
         public PublicKeyDTO GetPublicKey() => PublicKey;
-
-
     }
 }

@@ -1,11 +1,14 @@
-﻿using AuthMicroservice.Authorization.Utils.DTOs;
-using AuthMicroservice.Interfaces;
+﻿using Helpers.JWTValidate.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace AuthMicroservice.Authorization.Utils.KeyProviders
+namespace Helpers.JWTValidate.KeyProviders
 {
     public class PublicKeyProvider : IPublicKeyProvider
     {

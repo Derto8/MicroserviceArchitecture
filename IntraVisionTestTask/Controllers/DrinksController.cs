@@ -3,9 +3,13 @@ using DBContext.Enums;
 using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
+using IntraVisionTestTask.ConfigureOptions.Microservices;
+using IntraVisionTestTask.MicroservicesRequests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Data;
+using System.Net;
 
 namespace IntraVisionTestTask.Controllers
 {
@@ -14,47 +18,46 @@ namespace IntraVisionTestTask.Controllers
     public class DrinksController : ControllerBase
     {
         private ILogger<DrinksController> _logger { get; set; }
-        private IDrinksRepository _drinksRepository { get; set; }
+        private DrinksCoinsMicroserviceOptions _options { get; set; }
 
         public DrinksController(
             ILogger<DrinksController> logger,
-            ILogger<DrinksRepository> loggerRepo,
-            ApplicationContext context)
+            IOptions<DrinksCoinsMicroserviceOptions> options)
         {
             _logger = logger;
-            _drinksRepository = new DrinksRepository(context, loggerRepo);
+            _options = options.Value;
         }
 
-        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPost(template: "AddDrink")]
-        public async Task Add(Drinks drink, CancellationToken cancellationToken)
+        public async Task<HttpStatusCode> Add(Drinks drink, CancellationToken cancellationToken)
         {
-            await _drinksRepository.AddAsync(drink, cancellationToken);
+            string jwt = HttpContext.Session.GetString("token");
+            return await DrinksControllerMicroserviceRequest.AddDrink(drink, jwt, _options, cancellationToken);
         }
 
-        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut(template: "UpdateDrink")]
-        public async Task Update(Guid idDrink, Drinks drink, CancellationToken cancellationToken)
+        public async Task<HttpStatusCode> Update(Guid idDrink, Drinks drink, CancellationToken cancellationToken)
         {
-            await _drinksRepository.UpdateAsync(idDrink, drink, cancellationToken);
+            string jwt = HttpContext.Session.GetString("token");
+            return await DrinksControllerMicroserviceRequest.UpdateDrink(idDrink, drink, jwt, _options, cancellationToken);
         }
 
-        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpDelete(template: "DeleteDrink")]
-        public async Task Delete(Guid idDrink, CancellationToken cancellationToken)
+        public async Task<HttpStatusCode> Delete(Guid idDrink, CancellationToken cancellationToken)
         {
-            await _drinksRepository.DeleteAsync(idDrink, cancellationToken);
+            string jwt = HttpContext.Session.GetString("token");
+            return await DrinksControllerMicroserviceRequest.DeleteDrink(idDrink, jwt, _options, cancellationToken);
         }
         [HttpPost(template: "GetDrink")]
         public async Task<Drinks> Get(Guid idDrink, CancellationToken cancellationToken)
         {
-            return await _drinksRepository.GetAsync(idDrink, cancellationToken);
+            return await DrinksControllerMicroserviceRequest.GetDrink(idDrink, _options, cancellationToken);
         }
 
         [HttpGet(template: "GetAllDrinks")]
         public async Task<IEnumerable<Drinks>> GetAll(CancellationToken cancellationToken)
         {
-            return await _drinksRepository.GetAllAsync(cancellationToken);
+            return await DrinksControllerMicroserviceRequest.GetAllDrinks(_options, cancellationToken);
         }
     }
 }

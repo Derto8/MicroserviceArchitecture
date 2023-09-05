@@ -1,6 +1,7 @@
-﻿using AuthMicroservice.Authorization.Utils.KeyProviders;
-using DBContext.Models;
+﻿using DBContext.Models;
 using DTOs.AuthDTOs;
+using Helpers.JWTValidate;
+using Helpers.JWTValidate.KeyProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

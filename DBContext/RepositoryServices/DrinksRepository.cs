@@ -25,20 +25,22 @@ namespace DBContext.RepositoryServices
         {
             await _context.DrinksTable.AddAsync(drink, cancellationToken);
             await SaveAsync(cancellationToken);
+            _logger.LogInformation($"{drink.Name}, напиток добавился");
         }
 
         public async Task UpdateAsync(Guid idDrink, Drinks drink, CancellationToken cancellationToken)
         {
-            Drinks drinkChange = await GetAsync(idDrink, cancellationToken);
             _context.Entry(drink).State = EntityState.Modified;
             await SaveAsync(cancellationToken);
+            _logger.LogInformation($"{drink.Name}, напиток обновился");
         }
 
         public async Task DeleteAsync(Guid idDrink, CancellationToken cancellationToken)
         {
-            Drinks drinkChange = await GetAsync(idDrink, cancellationToken);
-            _context.DrinksTable.Remove(drinkChange);
+            Drinks drinkDelete = await GetAsync(idDrink, cancellationToken);
+            _context.DrinksTable.Remove(drinkDelete);
             await SaveAsync(cancellationToken);
+            _logger.LogInformation($"{drinkDelete.Name}, напиток удалён");
         }
 
         public async Task<Drinks> GetAsync(Guid itemId, CancellationToken cancellationToken)

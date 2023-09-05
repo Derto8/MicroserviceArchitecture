@@ -27,9 +27,9 @@ namespace IntraVisionTestTask.Controllers
         }
 
         [HttpPost, Route("auth/{login}/{password}")]
-        public async Task<JWT> Authorize(string login, string password)
+        public async Task<JWT> Authorize(string login, string password, CancellationToken cancellationToken)
         {
-            JWT jwt = await AuthMicroserviceRequests.Authorize(login, password, _authOptions);
+            JWT jwt = await AuthMicroserviceRequests.Authorize(login, password, _authOptions, cancellationToken);
             HttpContext.Session.SetString("token", jwt.access_token);
             return jwt;
         }

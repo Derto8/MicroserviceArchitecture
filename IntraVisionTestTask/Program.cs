@@ -1,10 +1,3 @@
-
-using AuthMicroservice;
-using AuthMicroservice.Authorization;
-using AuthMicroservice.Authorization.Utils.KeyProviders;
-using AuthMicroservice.Authorization.Utils.Services;
-using AuthMicroservice.Controllers;
-using AuthMicroservice.Interfaces;
 using DBContext;
 using DBContext.Interfaces;
 using DBContext.RepositoryServices;
@@ -19,6 +12,11 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using Shed.CoreKit.WebApi;
 using System.Security.Cryptography;
+using Helpers;
+using Helpers.JWTValidate;
+using Helpers.JWTValidate.KeyProviders;
+using Helpers.JWTValidate.Interfaces;
+using IntraVisionTestTask.MicroservicesRequests;
 
 namespace IntraVisionTestTask
 {
@@ -37,9 +35,12 @@ namespace IntraVisionTestTask
                 builder.Configuration.GetSection("Microservices")
                 .GetSection(AuthMicroserviceOptions.Microservice));
 
-            builder.Services.Configure<DrinksMicroserviceOptions>(
+            builder.Services.Configure<DrinksCoinsMicroserviceOptions>(
                 builder.Configuration.GetSection("Microservices")
-                .GetSection(DrinksMicroserviceOptions.Microservice));
+                .GetSection(DrinksCoinsMicroserviceOptions.Microservice));
+
+            //настройки аутентификации токена
+            builder.Services.ConfigureOptions<JwtBearerOptionsConfiguration>();
 
             builder.Services.AddAuthentication(options =>
             {
@@ -58,41 +59,14 @@ namespace IntraVisionTestTask
                 opt.UseSqlServer(conn);
             });
 
-            //игнорируем ссылка на циклы и не сериализируем их
+            //игнорируем ссылки на циклы и не сериализируем их
             builder.Services.AddControllers().AddNewtonsoftJson(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
             //добавление авторизации в сваггер
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Drinks API", Version = "v1" });
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter a valid token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "Bearer"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] {}
-                    }
-                });
-            });
+            builder.Services.AddSwaggerDocumentation();
 
             builder.Services.AddCors();
 
@@ -100,13 +74,15 @@ namespace IntraVisionTestTask
             builder.Services.AddTransient<IDrinksRepository, DrinksRepository>();
             builder.Services.AddTransient<IPublicKeyProvider, PublicKeyProvider>();
 
+            //добавляем и настраиваем сессию
+            builder.Services.AddSessionSettings();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerDocumentation();
             }
 
             app.UseHttpsRedirection();
@@ -119,6 +95,7 @@ namespace IntraVisionTestTask
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.MapControllers();
+            app.UseSession();
 
             //настройка корсов
             app.UseCors(builder =>

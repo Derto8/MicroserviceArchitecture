@@ -20,6 +20,7 @@
     <ProjectReference Include="..\DBContext\DBContext.csproj" />
     <ProjectReference Include="..\DTOs\DTOs.csproj" />
     <ProjectReference Include="..\GlobalExceptionHandling\GlobalExceptionHandling.csproj" />
+    <ProjectReference Include="..\Helpers\Helpers.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,10 @@
 ﻿using AuthMicroservice.Authorization;
-using AuthMicroservice.Authorization.Utils.KeyProviders;
 using AuthMicroservice.Interfaces;
 using DBContext;
 using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
+using Helpers.JWTValidate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

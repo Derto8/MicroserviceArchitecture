@@ -5,17 +5,19 @@ using DBContext.Models;
 using DBContext.RepositoryServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
-namespace DrinksMicroservice.Controllers
+namespace DrinksCoinsMicroservice.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class DrinksController : ControllerBase
     {
-        private readonly ILogger<DrinksController> _logger;
+        private ILogger<DrinksController> _logger { get; set; }
         private IDrinksRepository _drinksRepository { get; set; }
 
-        public DrinksController(ILogger<DrinksController> logger,
+        public DrinksController(
+            ILogger<DrinksController> logger,
             ILogger<DrinksRepository> loggerRepo,
             ApplicationContext context)
         {
@@ -25,7 +27,7 @@ namespace DrinksMicroservice.Controllers
 
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPost(template: "AddDrink")]
-        public async Task Add([FromBody]Drinks drink, CancellationToken cancellationToken)
+        public async Task Add(Drinks drink, CancellationToken cancellationToken)
         {
             await _drinksRepository.AddAsync(drink, cancellationToken);
         }

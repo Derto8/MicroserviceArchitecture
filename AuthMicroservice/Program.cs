@@ -1,4 +1,3 @@
-using AuthMicroservice.Authorization.Utils.Services;
 using AuthMicroservice.Authorization;
 using AuthMicroservice.Controllers;
 using AuthMicroservice.Interfaces;
@@ -13,8 +12,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shed.CoreKit.WebApi;
 using System.Security.Cryptography;
-using AuthMicroservice.Authorization.Utils.KeyProviders;
 using Microsoft.OpenApi.Models;
+using Helpers.JWTValidate.KeyProviders;
+using Helpers.JWTValidate.Interfaces;
+using Helpers.JWTValidate;
+using Helpers;
 
 namespace AuthMicroservice
 {
@@ -30,10 +32,8 @@ namespace AuthMicroservice
             builder.Services.AddCors();
 
             builder.Services.AddMvcCore();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-            });
+
+            builder.Services.AddSwaggerDocumentation();
 
             builder.Services.AddControllers();
 
@@ -46,17 +46,15 @@ namespace AuthMicroservice
 
             builder.Services.AddSingleton<IPublicKeyProvider, PublicKeyProvider>();
             builder.Services.AddTransient<IAuthorize, AuthorizationImp>();
-            builder.Services.AddTransient<HttpClient>();
 
             var app = builder.Build();
 
             app.MapControllers();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            if (app.Environment.IsDevelopment())
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+                app.UseSwaggerDocumentation();
+            }
 
             app.UseCorrelationToken();
 

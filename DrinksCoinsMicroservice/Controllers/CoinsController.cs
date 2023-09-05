@@ -1,16 +1,13 @@
-﻿using DBContext;
-using DBContext.Enums;
+﻿using DBContext.Enums;
 using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
-using IntraVisionTestTask.ConfigureOptions.Microservices;
-using IntraVisionTestTask.MicroservicesRequests;
+using DBContext;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Diagnostics;
+using System.Data;
 
-namespace IntraVisionTestTask.Controllers
+namespace DrinksCoinsMicroservice.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -18,43 +15,40 @@ namespace IntraVisionTestTask.Controllers
     {
         private readonly ILogger<CoinsController> _logger;
         private readonly ICoinsRepository _coinsRepository;
-        private DrinksCoinsMicroserviceOptions _options { get; set; }
 
         public CoinsController(
             ILogger<CoinsController> logger,
             ILogger<CoinsRepository> loggerRepo,
-            ApplicationContext context,
-            IOptions<DrinksCoinsMicroserviceOptions> options)
+            ApplicationContext context)
         {
             _logger = logger;
             _coinsRepository = new CoinsRepository(context, loggerRepo);
-            _options = options.Value;
         }
 
         [HttpGet(template: "GetAllCoins")]
         public async Task<IEnumerable<Coins>> GetAllCoins(CancellationToken cancellationToken)
         {
-            return await CoinsControllerMicroserviceRequests.GetAllCoins(_options, cancellationToken);
+            return await _coinsRepository.GetAllAsync(cancellationToken);
         }
 
         [HttpPost(template: "GetCoin")]
         public async Task<Coins> GetCoin(Guid coinId, CancellationToken cancellationToken)
         {
-            return await CoinsControllerMicroserviceRequests.GetCoin(coinId, _options, cancellationToken);
+            return await _coinsRepository.GetAsync(coinId, cancellationToken);
         }
 
+        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut(template: "ChangeAmountCoin")]
         public async Task ChangeAmountCoin(Guid coinId, int amount, CancellationToken cancellationToken)
         {
-            string jwt = HttpContext.Session.GetString("token");
-            await CoinsControllerMicroserviceRequests.ChangeAmountCoin(coinId, amount, jwt, _options, cancellationToken);
+            await _coinsRepository.ChangeAmountCoinAsync(coinId, amount, cancellationToken);
         }
 
+        [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
         [HttpPut(template: "ChangeBlockStatusCoin")]
         public async Task ChangeBlockStatusCoin(Guid coinId, bool state, CancellationToken cancellationToken)
         {
-            string jwt = HttpContext.Session.GetString("token");
-            await CoinsControllerMicroserviceRequests.ChangeBlockStatusCoin(coinId, state, jwt, _options, cancellationToken);
+            await _coinsRepository.ChangeBlockStatusCoinAsync(coinId, state, cancellationToken);
         }
     }
 }

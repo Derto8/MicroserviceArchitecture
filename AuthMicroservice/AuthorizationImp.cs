@@ -5,6 +5,7 @@ using DBContext;
 using DBContext.Interfaces;
 using DBContext.Models;
 using DBContext.RepositoryServices;
+using Helpers.JWTValidate;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 

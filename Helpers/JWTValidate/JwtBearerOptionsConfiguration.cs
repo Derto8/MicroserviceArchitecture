@@ -1,17 +1,23 @@
-﻿using AuthMicroservice.Interfaces;
+﻿using Helpers.JWTValidate.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace AuthMicroservice.Authorization.Utils.Services
+namespace Helpers.JWTValidate
 {
     public class JwtBearerOptionsConfiguration : IConfigureNamedOptions<JwtBearerOptions>
     {
         public JwtBearerOptionsConfiguration(
             IOptions<AuthOptions> authOptions,
             ILogger<JwtBearerOptions> logger,
-            IPublicKeyProvider publicKeyProvider,
             IServiceProvider serviceProvider)
         {
             _authOptions = authOptions.Value;
@@ -22,7 +28,7 @@ namespace AuthMicroservice.Authorization.Utils.Services
         private AuthOptions _authOptions { get; }
         private ILogger<JwtBearerOptions> _logger { get; }
         private IPublicKeyProvider PublicKeyProvider { get; }
-        public void Configure(string name, JwtBearerOptions options)
+        public void Configure(string? name, JwtBearerOptions options)
         {
             Configure(options);
         }
