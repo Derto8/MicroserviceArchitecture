@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AuthMicroservice\AuthMicroservice.csproj" />
     <ProjectReference Include="..\DBContext\DBContext.csproj" />
+    <ProjectReference Include="..\DTOs\DTOs.csproj" />
     <ProjectReference Include="..\GlobalExceptionHandling\GlobalExceptionHandling.csproj" />
   </ItemGroup>
 

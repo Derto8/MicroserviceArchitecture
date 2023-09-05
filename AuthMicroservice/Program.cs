@@ -14,6 +14,7 @@ using Newtonsoft.Json.Serialization;
 using Shed.CoreKit.WebApi;
 using System.Security.Cryptography;
 using AuthMicroservice.Authorization.Utils.KeyProviders;
+using Microsoft.OpenApi.Models;
 
 namespace AuthMicroservice
 {
@@ -23,15 +24,18 @@ namespace AuthMicroservice
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(AuthOptions.Autorization));
 
             builder.Services.AddCorrelationToken();
             builder.Services.AddCors();
 
             builder.Services.AddMvcCore();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
 
             builder.Services.AddControllers();
-
-            builder.Services.AddSingleton<IPublicKeyProvider, PublicKeyProvider>();
 
             //подключение бд
             string conn = builder.Configuration.GetConnectionString("ConnectionDataBase");
@@ -40,12 +44,19 @@ namespace AuthMicroservice
                 opt.UseSqlServer(conn);
             });
 
-            builder.Services.AddTransient<IAuthorization, AuthorizationImp>();
+            builder.Services.AddSingleton<IPublicKeyProvider, PublicKeyProvider>();
+            builder.Services.AddTransient<IAuthorize, AuthorizationImp>();
             builder.Services.AddTransient<HttpClient>();
 
             var app = builder.Build();
 
             app.MapControllers();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseCorrelationToken();
 
@@ -60,9 +71,6 @@ namespace AuthMicroservice
 
             // миддлваль обработки ошибок
             app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-            //привязываю реализацию к конечной точке
-            app.UseWebApiEndpoint<IAuthorization>();
 
             app.Run();
         }

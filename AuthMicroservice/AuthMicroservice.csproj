@@ -13,10 +13,12 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.21.0" />
     <PackageReference Include="Shed.CoreKit.WebApi" Version="1.0.0" />
     <PackageReference Include="Shed.CoreKit.WebApi.Abstractions" Version="1.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DBContext\DBContext.csproj" />
+    <ProjectReference Include="..\DTOs\DTOs.csproj" />
     <ProjectReference Include="..\GlobalExceptionHandling\GlobalExceptionHandling.csproj" />
   </ItemGroup>
 

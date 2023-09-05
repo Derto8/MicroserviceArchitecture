@@ -1,4 +1,5 @@
 ﻿using AuthMicroservice.Authorization;
+using AuthMicroservice.Authorization.Utils.KeyProviders;
 using AuthMicroservice.Interfaces;
 using DBContext;
 using DBContext.Interfaces;
@@ -19,7 +20,7 @@ namespace AuthMicroservice.Controllers
         private readonly ILogger<AuthorizationController> _logger;
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
-        private readonly IAuthorization _authorization;
+        private readonly IAuthorize _authorization;
         public AuthorizationController(
             ILogger<AuthorizationController> logger,
             ApplicationContext context,
@@ -43,11 +44,6 @@ namespace AuthMicroservice.Controllers
             return await _authorization.AuthorizationMethod(login, password, cancellationToken);
         }
 
-        [HttpGet(template: "Addsdgfd")]
-        [Authorize]
-        public string Gooo()
-        {
-            return "fdsf";
-        }
+        
     }
 }

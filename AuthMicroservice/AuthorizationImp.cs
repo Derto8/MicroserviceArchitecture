@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace AuthMicroservice
 {
-    public class AuthorizationImp : IAuthorization
+    public class AuthorizationImp : IAuthorize
     {
         private readonly ILogger<AuthorizationImp> _logger;
         private readonly IUserRepository _userRepository;

@@ -9,6 +9,7 @@ using DBContext;
 using DBContext.Interfaces;
 using DBContext.RepositoryServices;
 using GlobalExceptionHandling.Middlewares;
+using IntraVisionTestTask.ConfigureOptions.Microservices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,13 @@ namespace IntraVisionTestTask
             builder.Services.Configure<AuthOptions>(
                 builder.Configuration.GetSection(AuthOptions.Autorization));
 
-            builder.Services.ConfigureOptions<JwtBearerOptionsConfiguration>();
+            builder.Services.Configure<AuthMicroserviceOptions>(
+                builder.Configuration.GetSection("Microservices")
+                .GetSection(AuthMicroserviceOptions.Microservice));
+
+            builder.Services.Configure<DrinksMicroserviceOptions>(
+                builder.Configuration.GetSection("Microservices")
+                .GetSection(DrinksMicroserviceOptions.Microservice));
 
             builder.Services.AddAuthentication(options =>
             {
@@ -121,11 +128,6 @@ namespace IntraVisionTestTask
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });
-
-            string address = builder.Configuration["Addres"];
-
-            //перенаправление на микросервис по порту 5001
-            app.UseWebApiRedirect("api/auth", new WebApiEndpoint<IAuthorization>(new Uri($"{address}:5001"))); 
 
             app.Run();
         }
