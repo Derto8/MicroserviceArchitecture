@@ -55,7 +55,7 @@ namespace DBContext.RepositoryServices
 
         public async Task<Coins> GetAsync(Guid itemId, CancellationToken cancellationToken)
         {
-            return await _context.CoinsTable.Where(c => c.Equals(itemId)).FirstOrDefaultAsync(cancellationToken);
+            return await _context.CoinsTable.Where(c => c.Id.Equals(itemId)).FirstOrDefaultAsync(cancellationToken);
         }
     }
 }
