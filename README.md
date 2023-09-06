@@ -25,7 +25,7 @@ Coins, атрибуты: Id, Amount, IsBlocked, Denomination (enum).
 
 # Установка:
 **!!!Важно!!!** - после клонирования репозитория к себе на ПК, запускать основное приложение **IntraVisionTestTask** через **http**, на порту **5000**, после запустить приложения **AuthMicroservice** через **http** на порту **5001**
-и **DrinksCoinsMicroservice** тоже через **http** на порту **5001**, я запускал **AuthMicroservice** и **DrinksCoinsMicroservice** через командную строку, пример: **cd <Путь до проекта>\\AuthMicroservice --> dotnet run**, 
+и **DrinksCoinsMicroservice** тоже через **http** на порту **5002**, я запускал **AuthMicroservice** и **DrinksCoinsMicroservice** через командную строку, пример: **cd <Путь до проекта>\\AuthMicroservice --> dotnet run**, 
 если запускать не по этой инструкции, то микросервисы просто не будут работать.
 
 Конфигурация проекта **IntraVisionTestTask** находится в файле **appsettings.json**.
