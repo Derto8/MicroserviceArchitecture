@@ -8,6 +8,7 @@ using DBContext.RepositoryServices;
 using Helpers.JWTValidate;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace AuthMicroservice
 {
@@ -43,6 +44,11 @@ namespace AuthMicroservice
                 $"Login: {login}, Pass: {password}");
 
             return null;
+        }
+
+        public async Task RegistrationMethod(string login, string password, CancellationToken cancellationToken)
+        {
+            await _userRepository.RegistrationAsync(login, password, cancellationToken);
         }
     }
 }

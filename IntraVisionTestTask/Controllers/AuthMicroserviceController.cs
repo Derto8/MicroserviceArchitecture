@@ -1,11 +1,11 @@
 ﻿using DBContext;
-using DBContext.Interfaces;
 using DBContext.RepositoryServices;
 using DTOs.AuthDTOs;
 using IntraVisionTestTask.ConfigureOptions.Microservices;
 using IntraVisionTestTask.MicroservicesRequests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace IntraVisionTestTask.Controllers
 {
@@ -13,16 +13,12 @@ namespace IntraVisionTestTask.Controllers
     [Route("api/[controller]")]
     public class AuthMicroserviceController : ControllerBase
     {
-        private IUserRepository _userRepository { get; set; }
         private ILogger<AuthMicroserviceController> _logger { get; set; }
         private AuthMicroserviceOptions _authOptions { get; set; }
         public AuthMicroserviceController(ILogger<AuthMicroserviceController> logger,
-            ILogger<UserRepository> loggerRepo,
-            ApplicationContext context,
             IOptions<AuthMicroserviceOptions> authOptions)
         {
             _logger = logger;
-            _userRepository = new UserRepository(context, loggerRepo);
             _authOptions = authOptions.Value;
         }
 
@@ -32,6 +28,12 @@ namespace IntraVisionTestTask.Controllers
             JWT jwt = await AuthMicroserviceRequests.Authorize(login, password, _authOptions, cancellationToken);
             HttpContext.Session.SetString("token", jwt.access_token);
             return jwt;
+        }
+
+        [HttpPost, Route("reg/{login}/{password}")]
+        public async Task<HttpStatusCode> Registration(string login, string password, CancellationToken cancellationToken)
+        {
+            return await AuthMicroserviceRequests.Registration(login, password, _authOptions, cancellationToken);
         }
     }
 }

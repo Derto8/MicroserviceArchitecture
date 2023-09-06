@@ -39,8 +39,15 @@ namespace DBContext.RepositoryServices
             return await _context.UsersTable.ToListAsync(cancellationToken);
         }
 
-        public async Task RegistrationAsync(Users user, CancellationToken cancellationToken)
+        public async Task RegistrationAsync(string login, string password, CancellationToken cancellationToken)
         {
+            Users user = new Users
+            {
+                Id = Guid.NewGuid(),
+                Login = login,
+                Password = password,
+                Role = Enums.RoleEnum.User
+            };
             await _context.UsersTable.AddAsync(user, cancellationToken);
             await SaveAsync(cancellationToken);
         }

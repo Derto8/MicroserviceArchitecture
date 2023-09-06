@@ -37,13 +37,16 @@ namespace AuthMicroservice.Controllers
                 authOptions);
         }
 
-        //  [HttpPost(template: "AuthMethod")]
-        [HttpPost, Route("authuser/{login}/{password}")]
+        [HttpPost, Route("authUser/{login}/{password}")]
         public async Task<IResult> AuthorizationMethod(string login, string password, CancellationToken cancellationToken)
         {
             return await _authorization.AuthorizationMethod(login, password, cancellationToken);
         }
 
-        
+        [HttpPost, Route("regUser/{login}/{password}")]
+        public async Task RegistrationUser(string login, string password, CancellationToken cancellationToken)
+        {
+            await _authorization.RegistrationMethod(login, password, cancellationToken);
+        }
     }
 }
