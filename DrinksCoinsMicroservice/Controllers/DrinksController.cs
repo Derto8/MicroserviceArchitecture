@@ -9,6 +9,9 @@ using System.Data;
 
 namespace DrinksCoinsMicroservice.Controllers
 {
+    /// <summary>
+    /// Контроллер для взаимодействия с таблицей Drinks
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class DrinksController : ControllerBase
@@ -25,33 +28,60 @@ namespace DrinksCoinsMicroservice.Controllers
             _drinksRepository = new DrinksRepository(context, loggerRepo);
         }
 
+        /// <summary>
+        /// Добавляет запись в таблицу Drinks
+        /// </summary>
+        /// <param name="drink">Модель Drinks</param>
+        /// <param name="cancellationToken">Токен отмены задачи</param>
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
-        [HttpPost(template: "AddDrink")]
-        public async Task Add(Drinks drink, CancellationToken cancellationToken)
+        [HttpPost, Route("Add")]
+        public async Task Add([FromBody]Drinks drink, CancellationToken cancellationToken)
         {
             await _drinksRepository.AddAsync(drink, cancellationToken);
         }
 
+        /// <summary>
+        /// Обновляет запись в таблице Drinks
+        /// </summary>
+        /// <param name="drink">Модель Drinks</param>
+        /// <param name="cancellationToken">Токен отмены задачи</param>
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
-        [HttpPut(template: "UpdateDrink")]
-        public async Task Update(Guid idDrink, Drinks drink, CancellationToken cancellationToken)
+        [HttpPut, Route("Update")]
+        public async Task Update([FromBody]Drinks drink, CancellationToken cancellationToken)
         {
-            await _drinksRepository.UpdateAsync(idDrink, drink, cancellationToken);
+            await _drinksRepository.UpdateAsync(drink, cancellationToken);
         }
 
+        /// <summary>
+        /// Удаляет запись в таблице Drinks
+        /// </summary>
+        /// <param name="idDrink">Id записи</param>
+        /// <param name="cancellationToken">Токен отмены задачи</param>
         [Authorize(Roles = $"{nameof(RoleEnum.Admin)}")]
-        [HttpDelete(template: "DeleteDrink")]
+        [HttpDelete, Route("Delete/{idDrink}")]
         public async Task Delete(Guid idDrink, CancellationToken cancellationToken)
         {
             await _drinksRepository.DeleteAsync(idDrink, cancellationToken);
         }
-        [HttpPost(template: "GetDrink")]
+
+        /// <summary>
+        /// Получаем одну запись из таблицы Drinks
+        /// </summary>
+        /// <param name="idDrink">Id записи</param>
+        /// <param name="cancellationToken">Токен отмены задачи</param>
+        /// <returns>Модель данных одной записи из таблицы Drinks</returns>
+        [HttpPost, Route("GetDrink/{idDrink}")]
         public async Task<Drinks> Get(Guid idDrink, CancellationToken cancellationToken)
         {
             return await _drinksRepository.GetAsync(idDrink, cancellationToken);
         }
 
-        [HttpGet(template: "GetAllDrinks")]
+        /// <summary>
+        /// Получаем все записи из таблицы Drinks
+        /// </summary>
+        /// <param name="cancellationToken">Токен отмены задачи</param>
+        /// <returns>Перечисление всех данных модели Drinks</returns>
+        [HttpGet, Route("GetAllDrinks")]
         public async Task<IEnumerable<Drinks>> GetAll(CancellationToken cancellationToken)
         {
             return await _drinksRepository.GetAllAsync(cancellationToken);

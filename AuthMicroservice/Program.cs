@@ -26,13 +26,16 @@ namespace AuthMicroservice
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
+            //прив€зываю раздел Autorization и добавл€ю его в DI-контейнер
             builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(AuthOptions.Autorization));
 
-            builder.Services.AddCorrelationToken();
             builder.Services.AddCors();
 
+            //дл€ того, чтобы в методы контроллера передавалс€ CancellationToken
             builder.Services.AddMvcCore();
 
+            //добавление документации сваггера
             builder.Services.AddSwaggerDocumentation();
 
             builder.Services.AddControllers();
@@ -56,9 +59,7 @@ namespace AuthMicroservice
                 app.UseSwaggerDocumentation();
             }
 
-            app.UseCorrelationToken();
-
-            //корсы
+            //настраиваем корсы
             app.UseCors(builder =>
             {
                 builder
@@ -67,7 +68,7 @@ namespace AuthMicroservice
                     .AllowAnyHeader();
             });
 
-            // миддлваль обработки ошибок
+            // миддлваль глобальной обработки ошибок
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.Run();

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace DTOs.AuthDTOs
 {
+    /// <summary>
+    /// DTO, создал для того, чтобы передавать данные
+    /// между микросервисом AuthMicroservic и сервисом IntraVisionTestTask
+    /// </summary>
     public class JWT
     {
         public string access_token { get; set; }

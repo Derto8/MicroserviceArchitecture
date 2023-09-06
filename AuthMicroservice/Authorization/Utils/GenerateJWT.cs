@@ -8,13 +8,22 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace AuthMicroservice.Authorization.Utils
 {
+    /// <summary>
+    /// Класс генерации jwt
+    /// </summary>
     public static class GenerateJWT
     {
-        public static IResult Generate(Users user, IOptions<AuthOptions> _authOptions, 
-            CancellationToken cancellationToken)
+        /// <summary>
+        /// Генерирует jwt
+        /// </summary>
+        /// <param name="user">Модель юзера</param>
+        /// <param name="_authOptions">Параметры авторизации на сервере</param>
+        /// <returns>JSON, в котором находится jwt и id записи с данными юзера, 
+        /// которому принадлежит данный jwt</returns>
+        public static IResult Generate(Users user, IOptions<AuthOptions> _authOptions)
         {
             //настройка клаймов (клайм логина и роли юзера)
-            var claims = ClaimSettings.GetClaims(user, cancellationToken);
+            var claims = ClaimSettings.GetClaims(user);
 
             SecurityKeyProvider securityKeyProvider = new SecurityKeyProvider(_authOptions);
 

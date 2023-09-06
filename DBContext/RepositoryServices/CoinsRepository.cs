@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace DBContext.RepositoryServices
 {
+    /// <summary>
+    /// Класс имплементирующий интерфейс ICoinsRepository
+    /// </summary>
     public class CoinsRepository : ICoinsRepository
     {
         private ApplicationContext _context;

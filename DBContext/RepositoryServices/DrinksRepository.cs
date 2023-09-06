@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace DBContext.RepositoryServices
 {
+    /// <summary>
+    /// Класс имплементирующий интерфейс IDrinksRepository
+    /// </summary>
     public class DrinksRepository : IDrinksRepository
     {
         private ApplicationContext _context;
@@ -28,7 +31,7 @@ namespace DBContext.RepositoryServices
             _logger.LogInformation($"{drink.Name}, напиток добавился");
         }
 
-        public async Task UpdateAsync(Guid idDrink, Drinks drink, CancellationToken cancellationToken)
+        public async Task UpdateAsync(Drinks drink, CancellationToken cancellationToken)
         {
             _context.Entry(drink).State = EntityState.Modified;
             await SaveAsync(cancellationToken);

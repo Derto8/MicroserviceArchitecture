@@ -13,6 +13,10 @@ using System.Net;
 
 namespace IntraVisionTestTask.Controllers
 {
+    /// <summary>
+    /// Контроллер для запросов к микросервису DrinksCoinsMicroservice,
+    /// к таблице Coins
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class CoinsController : ControllerBase

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DBContext.Models
 {
+    /// <summary>
+    /// Модель таблицы Coins
+    /// </summary>
     public class Coins
     {
         public Guid Id { get; set; }

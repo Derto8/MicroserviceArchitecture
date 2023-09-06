@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace GlobalExceptionHandling.DTO
 {
+    /// <summary>
+    /// DTO ошибки
+    /// </summary>
     public class ErrorDTO
     {
         public int StatusCode { get; set; }

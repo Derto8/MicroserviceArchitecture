@@ -13,6 +13,10 @@ using System.Net;
 
 namespace IntraVisionTestTask.Controllers
 {
+    /// <summary>
+    /// Контроллер для запросов к микросервису DrinksCoinsMicroservice,
+    /// к таблице Drinks
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class DrinksController : ControllerBase
@@ -36,10 +40,10 @@ namespace IntraVisionTestTask.Controllers
         }
 
         [HttpPut(template: "UpdateDrink")]
-        public async Task<HttpStatusCode> Update(Guid idDrink, Drinks drink, CancellationToken cancellationToken)
+        public async Task<HttpStatusCode> Update(Drinks drink, CancellationToken cancellationToken)
         {
             string jwt = HttpContext.Session.GetString("token");
-            return await DrinksControllerMicroserviceRequest.UpdateDrink(idDrink, drink, jwt, _options, cancellationToken);
+            return await DrinksControllerMicroserviceRequest.UpdateDrink(drink, jwt, _options, cancellationToken);
         }
 
         [HttpDelete(template: "DeleteDrink")]

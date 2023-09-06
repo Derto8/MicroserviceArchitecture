@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DBContext.Models
 {
+    /// <summary>
+    /// Модель таблицы Drinks
+    /// </summary>
     public class Drinks
     {
         public Guid Id { get; set; }

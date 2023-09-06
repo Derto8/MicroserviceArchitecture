@@ -6,8 +6,17 @@ namespace DBContext
 {
     public class ApplicationContext : DbContext
     {
+        /// <summary>
+        /// Проперти таблицы Users
+        /// </summary>
         public DbSet<Users> UsersTable { get; set; }
+        /// <summary>
+        /// Проперти таблицы Coins
+        /// </summary>
         public DbSet<Coins> CoinsTable { get; set; }
+        /// <summary>
+        /// Проперти таблицы Drinks
+        /// </summary>
         public DbSet<Drinks> DrinksTable { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
@@ -15,6 +24,10 @@ namespace DBContext
             Database.EnsureCreated();
         }
 
+        /// <summary>
+        /// При создании бд добавление тестовых данных в таблицы
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Users>().HasData(

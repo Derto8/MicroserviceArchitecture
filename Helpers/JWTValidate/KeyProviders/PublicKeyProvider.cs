@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Helpers.JWTValidate.KeyProviders
 {
+    /// <summary>
+    /// Провайдер публичного ключа, имплементирующий интерфейс IPublicKeyProvider
+    /// </summary>
     public class PublicKeyProvider : IPublicKeyProvider
     {
         private AuthOptions _authOptions { get; }

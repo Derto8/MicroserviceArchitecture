@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace Helpers.JWTValidate
 {
+    /// <summary>
+    /// Класс настройки валидации jwt
+    /// </summary>
     public class JwtBearerOptionsConfiguration : IConfigureNamedOptions<JwtBearerOptions>
     {
         public JwtBearerOptionsConfiguration(
@@ -28,11 +31,21 @@ namespace Helpers.JWTValidate
         private AuthOptions _authOptions { get; }
         private ILogger<JwtBearerOptions> _logger { get; }
         private IPublicKeyProvider PublicKeyProvider { get; }
+
+        /// <summary>
+        /// Конфигурация настройки валидации jwt
+        /// </summary>
+        /// <param name="name">??</param>
+        /// <param name="options">jwt опции</param>
         public void Configure(string? name, JwtBearerOptions options)
         {
             Configure(options);
         }
 
+        /// <summary>
+        /// Конфигурация настройки валидации jwt
+        /// </summary>
+        /// <param name="options">jwt опции</param>
         public void Configure(JwtBearerOptions options)
         {
             options.IncludeErrorDetails = true;
@@ -48,8 +61,10 @@ namespace Helpers.JWTValidate
                 IssuerSigningKey = PublicKeyProvider.GetKey(),
                 ValidateIssuerSigningKey = true,
             };
+            //лог событий
             options.Events = new JwtBearerEvents
             {
+                //при ошибке валидации токена
                 OnAuthenticationFailed = context =>
                 {
                     context.NoResult();

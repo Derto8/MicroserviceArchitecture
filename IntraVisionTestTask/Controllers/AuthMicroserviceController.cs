@@ -9,6 +9,9 @@ using System.Net;
 
 namespace IntraVisionTestTask.Controllers
 {
+    /// <summary>
+    /// Контроллер для запросов к микросервису AuthMicroservice
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class AuthMicroserviceController : ControllerBase

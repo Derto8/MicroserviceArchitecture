@@ -12,6 +12,9 @@ using System.Net;
 
 namespace AuthMicroservice
 {
+    /// <summary>
+    /// класс имплементирующий интефейс IAuthorize
+    /// </summary>
     public class AuthorizationImp : IAuthorize
     {
         private readonly ILogger<AuthorizationImp> _logger;
@@ -34,14 +37,10 @@ namespace AuthMicroservice
 
             if (user != null)
             {
-                IResult jwt = GenerateJWT.Generate(user, _authOptions, cancellationToken);
-
-                _logger.LogInformation($"Юзер авторизировался: {login}");
+                IResult jwt = GenerateJWT.Generate(user, _authOptions);
 
                 return jwt;
             }
-            _logger.LogInformation($"Юзер не смог авторизироваться\n" +
-                $"Login: {login}, Pass: {password}");
 
             return null;
         }

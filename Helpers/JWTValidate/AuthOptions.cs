@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Helpers.JWTValidate
 {
+    /// <summary>
+    /// Параметры авторизации
+    /// </summary>
     public class AuthOptions
     {
         public const string Autorization = "Authorization";

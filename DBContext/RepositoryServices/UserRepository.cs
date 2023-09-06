@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace DBContext.RepositoryServices
 {
+    /// <summary>
+    /// Класс имплементирующий интерфейс IUserRepository
+    /// </summary>
     public class UserRepository : IUserRepository
     {
         private ApplicationContext _context;

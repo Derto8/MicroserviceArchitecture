@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace GlobalExceptionHandling.Middlewares
 {
+    /// <summary>
+    /// Мидлварь глобальной обработки ошибок
+    /// </summary>
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
@@ -25,6 +28,10 @@ namespace GlobalExceptionHandling.Middlewares
             _logger = logger;
         }
 
+        /// <summary>
+        /// Метод, который проверяет, возникает ли ошибка при запросе
+        /// </summary>
+        /// <param name="httpContext">Контекст запроса</param>
         public async Task InvokeAsync(HttpContext httpContext)
         {
             try
@@ -41,6 +48,13 @@ namespace GlobalExceptionHandling.Middlewares
             }
         }
 
+        /// <summary>
+        /// Хендлер ошибок
+        /// </summary>
+        /// <param name="context">Контекст запроса</param>
+        /// <param name="exMsg">Сообщение ошибки</param>
+        /// <param name="stackTrace">StackTrace ошибки</param>
+        /// <param name="exData">Дополнительные данные об ошибке</param>
         private async Task HandleExceptionAsync(
             HttpContext context,
             string exMsg,

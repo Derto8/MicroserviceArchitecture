@@ -3,9 +3,17 @@ using System.Security.Claims;
 
 namespace AuthMicroservice.Authorization.Utils
 {
+    /// <summary>
+    /// Класс настройки клаймов
+    /// </summary>
     public static class ClaimSettings
     {
-        public static List<Claim> GetClaims(Users user, CancellationToken cancellationToken)
+        /// <summary>
+        /// Метод настраивающий клаймы
+        /// </summary>
+        /// <param name="user">Модель юзера</param>
+        /// <returns></returns>
+        public static List<Claim> GetClaims(Users user)
         {
             var claims = new List<Claim> {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),

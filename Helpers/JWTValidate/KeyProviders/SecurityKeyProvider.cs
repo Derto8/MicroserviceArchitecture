@@ -10,12 +10,19 @@ using System.Threading.Tasks;
 
 namespace Helpers.JWTValidate.KeyProviders
 {
+    /// <summary>
+    /// Провайдер приватного и публичного ключа
+    /// </summary>
     public class SecurityKeyProvider
     {
         private SecurityKey PrivateKey { get; }
         private PublicKeyDTO PublicKey { get; }
 
 
+        /// <summary>
+        /// Шифруем публичный и приватный ключи
+        /// </summary>
+        /// <param name="options"></param>
         public SecurityKeyProvider(IOptions<AuthOptions> options)
         {
             var rsa = RSA.Create();
@@ -31,7 +38,15 @@ namespace Helpers.JWTValidate.KeyProviders
             };
         }
 
+        /// <summary>
+        /// Возвращает приватный ключ
+        /// </summary>
+        /// <returns>Приватный ключ</returns>
         public SecurityKey GetPrivateKey() => PrivateKey;
+        /// <summary>
+        /// Возвращает публчный ключ
+        /// </summary>
+        /// <returns>Публичный ключ</returns>
         public PublicKeyDTO GetPublicKey() => PublicKey;
     }
 }

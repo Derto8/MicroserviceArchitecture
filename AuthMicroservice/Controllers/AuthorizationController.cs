@@ -18,8 +18,6 @@ namespace AuthMicroservice.Controllers
     public class AuthorizationController : ControllerBase
     {
         private readonly ILogger<AuthorizationController> _logger;
-        private readonly IUserRepository _userRepository;
-        private readonly IConfiguration _configuration;
         private readonly IAuthorize _authorization;
         public AuthorizationController(
             ILogger<AuthorizationController> logger,
@@ -37,13 +35,27 @@ namespace AuthMicroservice.Controllers
                 authOptions);
         }
 
-        [HttpPost, Route("authUser/{login}/{password}")]
+
+        /// <summary>
+        /// Метод авторизации юзера
+        /// </summary>
+        /// <param name="login">логин</param>
+        /// <param name="password">пароль</param>
+        /// <param name="cancellationToken">токен отмены задачи</param>
+        /// <returns>JSON-файл с jwt и id записи в бд пользователя</returns>
+        [HttpPost, Route("AuthUser/{login}/{password}")]
         public async Task<IResult> AuthorizationMethod(string login, string password, CancellationToken cancellationToken)
         {
             return await _authorization.AuthorizationMethod(login, password, cancellationToken);
         }
 
-        [HttpPost, Route("regUser/{login}/{password}")]
+        /// <summary>
+        /// Метод авторизации юзера
+        /// </summary>
+        /// <param name="login">логин</param>
+        /// <param name="password">пароль</param>
+        /// <param name="cancellationToken">токен отмены задачи</param>
+        [HttpPost, Route("RegUser/{login}/{password}")]
         public async Task RegistrationUser(string login, string password, CancellationToken cancellationToken)
         {
             await _authorization.RegistrationMethod(login, password, cancellationToken);
