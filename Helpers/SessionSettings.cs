@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Helpers
 {
+    /// <summary>
+    /// настройка сессии
+    /// </summary>
     public static class SessionSettings
     {
         public static IServiceCollection AddSessionSettings(this IServiceCollection services)

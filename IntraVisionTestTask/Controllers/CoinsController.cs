@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using System.Net;
 
 namespace IntraVisionTestTask.Controllers
 {
@@ -44,17 +45,17 @@ namespace IntraVisionTestTask.Controllers
         }
 
         [HttpPut(template: "ChangeAmountCoin")]
-        public async Task ChangeAmountCoin(Guid coinId, int amount, CancellationToken cancellationToken)
+        public async Task<HttpStatusCode> ChangeAmountCoin(Guid coinId, int amount, CancellationToken cancellationToken)
         {
             string jwt = HttpContext.Session.GetString("token");
-            await CoinsControllerMicroserviceRequests.ChangeAmountCoin(coinId, amount, jwt, _options, cancellationToken);
+            return await CoinsControllerMicroserviceRequests.ChangeAmountCoin(coinId, amount, jwt, _options, cancellationToken);
         }
 
         [HttpPut(template: "ChangeBlockStatusCoin")]
-        public async Task ChangeBlockStatusCoin(Guid coinId, bool state, CancellationToken cancellationToken)
+        public async Task<HttpStatusCode> ChangeBlockStatusCoin(Guid coinId, bool state, CancellationToken cancellationToken)
         {
             string jwt = HttpContext.Session.GetString("token");
-            await CoinsControllerMicroserviceRequests.ChangeBlockStatusCoin(coinId, state, jwt, _options, cancellationToken);
+            return await CoinsControllerMicroserviceRequests.ChangeBlockStatusCoin(coinId, state, jwt, _options, cancellationToken);
         }
     }
 }

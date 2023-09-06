@@ -34,7 +34,7 @@ namespace IntraVisionTestTask.MicroservicesRequests
         {
             using (var client = new HttpClient())
             {
-                using var request = new HttpRequestMessage(HttpMethod.Put, $"{opt.Addres}/api/Coins/GetCoin?coinId={idCoin}&amount={amount}");
+                using var request = new HttpRequestMessage(HttpMethod.Put, $"{opt.Addres}/api/Coins/ChangeAmountCoin?coinId={idCoin}&amount={amount}");
                 request.Headers.Authorization = new AuthenticationHeaderValue($"Bearer", jwt);
                 var responce = await client.SendAsync(request, cancellationToken);
                 return responce.StatusCode;
@@ -46,7 +46,7 @@ namespace IntraVisionTestTask.MicroservicesRequests
         {
             using (var client = new HttpClient())
             {
-                using var request = new HttpRequestMessage(HttpMethod.Put, $"{opt.Addres}/api/Coins/GetCoin?coinId={idCoin}&state={state}");
+                using var request = new HttpRequestMessage(HttpMethod.Put, $"{opt.Addres}/api/Coins/ChangeBlockStatusCoin?coinId={idCoin}&state={state}");
                 request.Headers.Authorization = new AuthenticationHeaderValue($"Bearer", jwt);
                 var responce = await client.SendAsync(request, cancellationToken);
                 return responce.StatusCode;
